@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #04100b;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #0c2b1e 0%, #04100b 70%);
+  --surface: #081d15;
+  --surface-hover: #0e291e;
+  --surface-glass: rgba(8, 29, 21, 0.75);
+  --accent: #dfb750;
+  --accent-gold-light: #fae188;
+  --accent-gold-dark: #9b7720;
+  --accent-silver: #dbe0e8;
+  --accent-emerald: #10b981;
+  --accent-emerald-glow: rgba(16, 185, 129, 0.35);
+  --text: #f2f5f3;
+  --muted: #8ea399;
+  --border: #17382a;
+  --border-gold: rgba(223, 183, 80, 0.3);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+body {
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(12, 43, 30, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(8, 29, 21, 0.4) 0px, transparent 50%),
+    radial-gradient(at 50% 30%, rgba(16, 185, 129, 0.04) 0px, transparent 60%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: Cinzel, serif;
+}
+
+@layer components {
+  /* Velvet Emerald & Brushed Gold Card */
+  .clay {
+    background: linear-gradient(145deg, #0a241b, #061812);
+    border-radius: 1.5rem;
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 16px 36px -8px rgba(0, 0, 0, 0.7),
+      0 4px 12px -2px rgba(4, 16, 11, 0.5),
+      inset 0 1px 1px rgba(223, 183, 80, 0.12),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .clay:hover {
+    border-color: rgba(223, 183, 80, 0.45);
+    box-shadow: 
+      0 20px 40px -10px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(16, 185, 129, 0.1),
+      inset 0 1px 2px rgba(223, 183, 80, 0.25);
+  }
+
+  /* Burnished Antique Gold Action Button */
+  .clay-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.8rem;
+    border-radius: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    font-size: 0.825rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(145deg, #f5d47a, #d4a73b 50%, #9e781d);
+    color: #04100b;
+    border: 1px solid rgba(255, 235, 168, 0.5);
+    box-shadow: 
+      0 6px 18px rgba(0, 0, 0, 0.6),
+      0 2px 4px rgba(212, 167, 59, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+  }
+
+  .clay-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(145deg, #fae08f, #e0b44a 50%, #ad8424);
+    box-shadow: 
+      0 10px 24px rgba(0, 0, 0, 0.7),
+      0 0 16px rgba(223, 183, 80, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  }
+
+  .clay-btn:active {
+    transform: translateY(1px);
+    box-shadow: 
+      0 2px 6px rgba(0, 0, 0, 0.7),
+      inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Platinum Ghost Button */
+  .clay-btn.ghost {
+    background: linear-gradient(145deg, #092118, #051610);
+    color: #e2e8e5;
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.5),
+      inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .clay-btn.ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 
+      0 8px 20px rgba(0, 0, 0, 0.6),
+      0 0 12px rgba(223, 183, 80, 0.2);
+  }
+
+  /* Form Fields */
+  .field {
+    width: 100%;
+    background: #05150f;
+    border-radius: 0.85rem;
+    padding: 0.85rem 1.1rem;
+    color: #f2f5f3;
+    border: 1px solid var(--border);
+    box-shadow: 
+      inset 2px 2px 8px rgba(0, 0, 0, 0.7),
+      inset -1px -1px 3px rgba(255, 255, 255, 0.02);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 
+      0 0 10px rgba(223, 183, 80, 0.3),
+      inset 2px 2px 6px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Logo Signature Gold Box Border (Like "TATTOOZ" in the logo) */
+  .gold-box {
+    position: relative;
+    border: 1px solid rgba(223, 183, 80, 0.5);
+    box-shadow: 
+      0 0 16px rgba(16, 185, 129, 0.15),
+      inset 0 0 12px rgba(223, 183, 80, 0.08);
+  }
+
+  .gold-box::before,
+  .gold-box::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+  .gold-box::before { top: -3px; left: -3px; }
+  .gold-box::after { bottom: -3px; right: -3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
