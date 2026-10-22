@@ -343,6 +343,7 @@ function Layout() {
             <ul className="space-y-2 text-sm text-muted">
               <li><Link to="/" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Home</Link></li>
               <li><Link to="/about" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> About Studio</Link></li>
+              <li><Link to="/gallery?artist=noor" className="hover:text-cream transition flex items-center gap-1.5 font-semibold text-gold/90"><span className="text-gold">✦</span> Artworks by Founder Noor</Link></li>
               <li><Link to="/gallery" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Curated Portfolio</Link></li>
               <li><Link to="/styles" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Tattoo Styles</Link></li>
               <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Custom Quotes & Estimates</Link></li>
