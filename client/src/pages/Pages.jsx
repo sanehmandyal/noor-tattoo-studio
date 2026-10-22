@@ -894,34 +894,45 @@ export function FAQ() {
 }
 
 // 9. ABOUT PAGE
-export const About = () => (
-  <Wrap
-    title="About Noor Tattooz"
-    h="ILLUMINATING ART ON LIVING SKIN"
-    sub="The Noor Atelier Story"
-    desc="A premier atelier on Una Amb Road, Prem Nagar, Una (H.P.), founded on the principle that tattoos should be bespoke, surgical in hygiene, and timeless in aesthetic value."
-  >
-    <div className="max-w-4xl mx-auto space-y-16">
-      {/* Narrative Section */}
-      <div className="grid md:grid-cols-2 gap-10 items-center">
-        <div>
-          <span className="text-xs text-gold font-semibold uppercase tracking-widest block mb-2">Our Origins</span>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Born from Fine Arts and Architectural Precision</h2>
-          <p className="text-sm text-muted leading-relaxed mb-4">
-            Noor (نور) translates to <em>illumination</em> or <em>radiance</em>. Founded in Prem Nagar, Una, Himachal Pradesh, our atelier was created to escape the rushed, commercial flash shops of the past.
-          </p>
-          <p className="text-sm text-muted leading-relaxed">
-            Every client sits in a private, acoustic-insulated studio bay with personalized lighting, music, and tea service. We dedicate full afternoons to single clients rather than rushing through high turnover.
-          </p>
+export const About = () => {
+  const [s, setS] = useState({});
+  useEffect(() => {
+    api.get('/settings').then(r => setS(r.data)).catch(() => {});
+  }, []);
+
+  return (
+    <Wrap
+      title="About Noor Tattooz"
+      h="ILLUMINATING ART ON LIVING SKIN"
+      sub="The Noor Atelier Story"
+      desc={s.description || "A premier atelier on Una Amb Road, Prem Nagar, Una (H.P.), founded on the principle that tattoos should be bespoke, surgical in hygiene, and timeless in aesthetic value."}
+    >
+      <div className="max-w-4xl mx-auto space-y-16">
+        {/* Narrative Section */}
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <span className="text-xs text-gold font-semibold uppercase tracking-widest block mb-2">Our Origins</span>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Born from Fine Arts and Architectural Precision</h2>
+            <p className="text-sm text-muted leading-relaxed mb-4">
+              {s.businessName || 'Noor Tattooz Studio'} was founded on the principle that tattoos should be permanent fine art. Located at {s.address || 'Una Amb Road, Near Sabji Mandi, Prem Nagar, Una, Himachal Pradesh'}, our atelier is dedicated to custom narrative tattoos, delicate single-needle precision, and hospital-grade sterility.
+            </p>
+            <p className="text-sm text-muted leading-relaxed mb-4">
+              Every client sits in a private, acoustic-insulated studio bay with personalized lighting, music, and tea service. We dedicate full afternoons to single clients rather than rushing through high turnover.
+            </p>
+            {s.hours && (
+              <p className="text-xs text-gold font-semibold pt-1">
+                Studio Hours: {s.hours}
+              </p>
+            )}
+          </div>
+          <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/30">
+            <img
+              src="/tattoos/studio-interior.jpg"
+              alt="Noor Tattooz Interior Atmosphere"
+              className="w-full h-auto rounded-xl object-cover"
+            />
+          </div>
         </div>
-        <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/30">
-          <img
-            src="/tattoos/studio-interior.jpg"
-            alt="Noor Tattooz Interior Atmosphere"
-            className="w-full h-auto rounded-xl object-cover"
-          />
-        </div>
-      </div>
 
       {/* Hygiene Commitment Breakdown */}
       <div className="clay p-8 border border-line">
@@ -968,7 +979,8 @@ export const About = () => (
       </div>
     </div>
   </Wrap>
-);
+  );
+};
 
 // 10. PRIVACY POLICY
 export const Privacy = () => (

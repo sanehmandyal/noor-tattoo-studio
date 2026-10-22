@@ -18,7 +18,14 @@ export default function Home() {
 
   useEffect(() => {
     api.get('/settings').then(r => setSettings(r.data)).catch(() => {});
-    api.get('/gallery?featured=true&limit=6').then(r => setFeaturedGallery(r.data.items || [])).catch(() => {});
+    api.get('/gallery?featured=true&limit=6').then(r => {
+      const items = r.data.items || [];
+      if (items.length > 0) {
+        setFeaturedGallery(items);
+      } else {
+        api.get('/gallery?limit=6').then(res => setFeaturedGallery(res.data.items || [])).catch(() => {});
+      }
+    }).catch(() => {});
     api.get('/services?limit=6').then(r => setServices(r.data.items || [])).catch(() => {});
     api.get('/testimonials?limit=20').then(r => setTestimonials(r.data.items || [])).catch(() => {});
     api.get('/blog?limit=3').then(r => setPosts(r.data.items || [])).catch(() => {});
@@ -299,25 +306,57 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {styles.map(s => (
-              <Link
-                key={s.name}
-                to={`/styles/${s.slug}`}
-                className="glass-card p-6 group hover:border-gold/60 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="h-44 w-full rounded-xl overflow-hidden mb-5 bg-[#0a2218]">
-                    <img src={s.img} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            {(services.length > 0 ? services : styles).map(s => {
+              const itemTitle = s.title || s.name;
+              const itemDesc = s.description || s.desc;
+              const itemImg = s.image ? img(s.image) : s.img;
+              const itemDuration = s.duration;
+              const quoteMsg = `Hi Noor Tattooz Studio, I would like to consult or get a bespoke quote for ${itemTitle}.`;
+
+              return (
+                <div
+                  key={s._id || s.name}
+                  className="glass-card p-6 group hover:border-gold/60 transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="h-48 w-full rounded-xl overflow-hidden mb-5 bg-[#0a2218]">
+                      <img
+                        src={itemImg}
+                        alt={itemTitle}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-xl font-bold text-cream group-hover:text-gold transition">
+                        {itemTitle}
+                      </h3>
+                      {itemDuration && (
+                        <span className="text-[11px] font-semibold text-emerald px-2 py-0.5 rounded-full bg-emerald/15 border border-emerald/30 whitespace-nowrap">
+                          {itemDuration}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted mt-2 leading-relaxed line-clamp-3">
+                      {itemDesc}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-cream group-hover:text-gold transition">{s.name}</h3>
-                  <p className="text-sm text-muted mt-2 leading-relaxed">{s.desc}</p>
+                  <div className="mt-5 pt-3 border-t border-[#17382a] flex items-center justify-between text-xs text-gold font-semibold">
+                    <a
+                      href={waLink(settings.whatsapp || '8219811181', quoteMsg)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline flex items-center gap-1.5"
+                    >
+                      <span>Get Instant Quote</span>
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <Link to="/pricing" className="text-muted hover:text-cream transition">
+                      Details ›
+                    </Link>
+                  </div>
                 </div>
-                <div className="mt-5 pt-3 border-t border-[#17382a] flex items-center justify-between text-xs text-gold font-semibold">
-                  <span>Explore {s.tag} Guide</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
