@@ -1,9 +1,10 @@
 import axios from 'axios';
 
+const PROD_API_URL = 'https://noor-tattoo-studio-api.onrender.com';
+
 const getBaseURL = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (!envUrl) return '/api';
-  const clean = envUrl.replace(/\/+$/, '');
+  const envUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PROD_API_URL : '/api');
+  const clean = (envUrl || PROD_API_URL).replace(/\/+$/, '');
   return clean.endsWith('/api') ? clean : `${clean}/api`;
 };
 
@@ -29,9 +30,8 @@ export const errMsg = e =>
 
 export const img = u => {
   if (!u) return '';
-  if (u.startsWith('http://') || u.startsWith('https://')) return u;
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (!envUrl) return u;
+  if (u.startsWith('http://') || u.startsWith('https://') || u.startsWith('data:')) return u;
+  const envUrl = import.meta.env.VITE_API_URL || PROD_API_URL;
   const origin = envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
   return `${origin}${u.startsWith('/') ? '' : '/'}${u}`;
 };
