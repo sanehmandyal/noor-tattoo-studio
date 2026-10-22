@@ -31,6 +31,7 @@ export const login = wrap(async (req, res) => {
 
   res.cookie('token', token, cookieOpts);
   res.json({
+    token,
     user: {
       id: user.id,
       name: user.name,

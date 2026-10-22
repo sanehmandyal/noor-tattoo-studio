@@ -13,6 +13,7 @@ import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
 
 import { connectDB } from './config/db.js';
+import { autoSeedIfEmpty } from './config/bootstrap.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import { globalErrorHandler } from './middleware/errorHandler.js';
 import routes from './routes/index.js';
@@ -22,7 +23,31 @@ app.set('trust proxy', 1);
 
 // Security & Optimization Middleware
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+
+// Resilient CORS configuration
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL?.replace(/\/+$/, ''),
+  'https://noor-tattoo-studio.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/+$/, '');
+      const isAllowed = allowedOrigins.some(o => o.replace(/\/+$/, '') === cleanOrigin);
+      if (isAllowed || process.env.NODE_ENV !== 'production') {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true
+  })
+);
+
 app.use(compression());
 app.use(express.json({ limit: '100kb' }));
 app.use(cookieParser());
@@ -49,8 +74,10 @@ if (!process.env.JWT_SECRET || !process.env.MONGODB_URI) {
   process.exit(1);
 }
 
-// Connect to Database and start listening
+// Connect to Database, auto-seed defaults if brand new, and start listening
 await connectDB();
+await autoSeedIfEmpty();
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`API server running on port ${PORT}`));
 

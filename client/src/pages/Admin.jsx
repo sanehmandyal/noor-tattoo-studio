@@ -5,7 +5,19 @@ import { api, errMsg } from '../api.js';
 const STATUS = { bookings: ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'], inquiries: ['new', 'read', 'replied'] };
 function Login({ onLogin }) {
   const [f, setF] = useState({ email: '', password: '' }), [err, setErr] = useState('');
-  const go = async e => { e.preventDefault(); setErr(''); try { onLogin((await api.post('/auth/login', f)).data.user); } catch (x) { setErr(errMsg(x)); } };
+  const go = async e => {
+    e.preventDefault();
+    setErr('');
+    try {
+      const res = await api.post('/auth/login', f);
+      if (res.data.token) {
+        localStorage.setItem('noor_auth_token', res.data.token);
+      }
+      onLogin(res.data.user);
+    } catch (x) {
+      setErr(errMsg(x));
+    }
+  };
   return (<div className="min-h-screen grid place-items-center p-4"><form onSubmit={go} className="clay p-8 w-full max-w-sm grid gap-4">
     <img src="/logo.png" alt="Noor Tattoo Studio" width="96" height="96" className="mx-auto rounded-full" /><h1 className="text-2xl text-center">Admin Login</h1>
     <label className="grid gap-1 text-sm">Email<input type="email" required className="field" value={f.email} onChange={e => setF({ ...f, email: e.target.value })} /></label>
@@ -54,7 +66,11 @@ function Dashboard() {
   if (!user) return <Login onLogin={setUser} />;
   return (<div className="max-w-6xl mx-auto p-4"><Helmet><title>Admin | Noor Tattoo Studio</title><meta name="robots" content="noindex" /></Helmet>
     <header className="flex items-center justify-between mb-6"><h1 className="text-2xl">Dashboard</h1>
-      <button className="clay-btn ghost" onClick={async () => { await api.post('/auth/logout'); setUser(null); }}>Logout</button></header>
+      <button className="clay-btn ghost" onClick={async () => {
+        try { await api.post('/auth/logout'); } catch {}
+        localStorage.removeItem('noor_auth_token');
+        setUser(null);
+      }}>Logout</button></header>
     {stats && <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">{Object.entries(stats).map(([k, v]) => <div key={k} className="clay p-4"><p className="text-3xl text-gold">{v}</p><p className="text-sm text-muted capitalize">{k}</p></div>)}</div>}
     {chart && <div className="grid md:grid-cols-2 gap-4 mb-8"><Bars title="Bookings by status" data={chart.byStatus} /><Bars title="Bookings, last 6 months" data={chart.perMonth} /></div>}
     <div className="flex flex-wrap gap-3 mb-6" role="tablist">{[...TABS, ...(user.role === 'super_admin' ? ['users'] : [])].map(t => <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={`clay-btn !py-2 !px-4 ${tab === t ? '' : 'ghost'}`}>{t.toUpperCase()}</button>)}</div>
