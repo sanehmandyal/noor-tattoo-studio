@@ -80,13 +80,11 @@ h1, h2, h3, h4 {
     transform: translateY(-2px);
   }
 
-  /* Glass Header / Navbar */
+  /* Glass Header / Navbar (Opaque to prevent content show-through) */
   .glass-header {
-    background: rgba(4, 16, 11, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(223, 183, 80, 0.15);
-    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+    background: #04100b;
+    border-bottom: 1px solid rgba(223, 183, 80, 0.2);
+    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.75);
   }
 
   /* Glass Call Button in Navbar */

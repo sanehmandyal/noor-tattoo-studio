@@ -86,49 +86,50 @@ function Layout() {
 
   return (
     <>
-      {/* Top Studio Bar */}
-      <div className="bg-[#030d08] border-b border-[#143024] text-xs text-[#8aa399] py-2 px-4 hidden md:block">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5 text-gold font-medium">
-              <Sparkles size={13} />
-              <span>Una Amb Road, Prem Nagar, Una (H.P.)</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-[#8aa399] hover:text-cream transition">
-              <ShieldCheck size={13} className="text-emerald" />
-              <span>Hospital-Grade Sterile Studio</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-[#8aa399]">
-              <Clock size={13} />
-              <span>Mon–Sun: 10 AM – 8:30 PM</span>
-            </span>
-          </div>
+      {/* Unified Solid Fixed Header (No gaps, no show-through) */}
+      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-[#04100b] border-b border-[#143526] ${
+        scrolled ? 'shadow-2xl shadow-black/80' : 'shadow-md'
+      }`}>
+        {/* Top Studio Bar */}
+        <div className="bg-[#020a06] border-b border-[#10291f] text-xs text-[#8aa399] py-1.5 px-4 hidden md:block">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <span className="flex items-center gap-1.5 text-gold font-medium">
+                <Sparkles size={13} />
+                <span>Una Amb Road, Prem Nagar, Una (H.P.)</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-[#8aa399] hover:text-cream transition">
+                <ShieldCheck size={13} className="text-emerald" />
+                <span>Hospital-Grade Sterile Studio</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-[#8aa399]">
+                <Clock size={13} />
+                <span>Mon–Sun: 10 AM – 8:30 PM</span>
+              </span>
+            </div>
 
-          <div className="flex items-center gap-5">
-            <a
-              href={s.instagram || "https://www.instagram.com/noortattooz"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-silver hover:text-gold transition font-medium"
-            >
-              <Instagram size={13} className="text-gold" />
-              <span>@noortattooz</span>
-            </a>
-            {s.phone && (
-              <a href={`tel:${s.phone.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 text-silver hover:text-gold transition">
-                <Phone size={12} />
-                <span>{s.phone}</span>
+            <div className="flex items-center gap-5">
+              <a
+                href={s.instagram || "https://www.instagram.com/noortattooz"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-silver hover:text-gold transition font-medium"
+              >
+                <Instagram size={13} className="text-gold" />
+                <span>@noortattooz</span>
               </a>
-            )}
+              {s.phone && (
+                <a href={`tel:${s.phone.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 text-silver hover:text-gold transition">
+                  <Phone size={12} />
+                  <span>{s.phone}</span>
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Header with Glassmorphism */}
-      <header className={`fixed top-0 md:top-[33px] inset-x-0 z-40 transition-all duration-300 ${
-        scrolled ? 'glass-header' : 'bg-[#04100b]/80 backdrop-blur-md border-b border-[#143526]/60'
-      }`}>
-        <nav className="max-w-6xl mx-auto flex items-center justify-between px-3.5 sm:px-4 py-2 sm:py-2.5" aria-label="Main Navigation">
+        {/* Main Navbar */}
+        <nav className="max-w-6xl mx-auto flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3" aria-label="Main Navigation">
           <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0" aria-label="Noor Tattooz Home">
             <img
               src="/logo.png"
@@ -270,7 +271,7 @@ function Layout() {
       </Helmet>
 
       {/* Main Viewport */}
-      <main className="pt-24 md:pt-28 min-h-screen">
+      <main className="pt-[60px] md:pt-[92px] min-h-screen">
         <Outlet />
       </main>
 
