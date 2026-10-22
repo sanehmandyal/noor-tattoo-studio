@@ -32,7 +32,7 @@ await M.Settings.findOneAndUpdate(
     email: 'noortattoozuna@gmail.com',
     hours: 'Monday – Sunday: 10:00 AM – 8:30 PM (Walk-ins & Appointments Welcome)',
     whatsapp: '918219811181',
-    instagram: 'https://instagram.com/noor_tattooz',
+    instagram: 'https://www.instagram.com/noortattooz',
     facebook: 'https://facebook.com/noortattooz',
     mapsUrl: 'https://share.google/byos1q4FITCvikbhe',
     ogImage: '/logo.png',
@@ -76,7 +76,7 @@ const artistsData = [
     styles: ['Dark Realism', 'Sacred Geometry', 'Custom Sleeves', 'Spiritual Art', 'Cover-Up Art'],
     specialties: ['Anatomical sleeve flow', 'Spiritual & mythological iconography', 'High-contrast black & grey'],
     socialLinks: {
-      instagram: 'https://instagram.com/noor_tattooz',
+      instagram: 'https://www.instagram.com/noortattooz',
       facebook: 'https://facebook.com/noortattooz'
     },
     status: 'available'
@@ -496,7 +496,7 @@ const faqsData = [
   },
   {
     question: 'How do you determine tattoo pricing?',
-    answer: 'Pricing is based on design complexity, scale, anatomical placement, and artist specialization. Small to medium pieces are quoted with a transparent flat price upfront (starting at ₹3,000 for fine line pieces). Large ongoing projects (full sleeves, backpieces) are booked at competitive half-day or full-day rates. You will always receive an exact quote during consultation with zero hidden fees.',
+    answer: 'Pricing is based on design complexity, scale, anatomical placement, and artist specialization. Every piece is estimated transparently upfront directly on WhatsApp or during your studio consultation, with zero hidden fees.',
     category: 'Pricing & Bookings',
     published: true
   },
@@ -532,7 +532,7 @@ const faqsData = [
   },
   {
     question: 'What is your deposit and cancellation policy?',
-    answer: 'To secure your artist date and initiate custom illustration drafting, a ₹2,000 to ₹5,000 deposit is required. Deposits are fully deducted from your final session price. We require at least 48 hours notice to reschedule your appointment without forfeiting your deposit.',
+    answer: 'To secure your session date and initiate custom illustration drafting, a standard appointment deposit (tailored to project scale) is required. Deposits are fully deducted from your final session payment. We require at least 48 hours notice to reschedule your appointment without forfeiting your deposit.',
     category: 'Pricing & Bookings',
     published: true
   }

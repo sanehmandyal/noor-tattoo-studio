@@ -100,12 +100,13 @@ export default function Booking() {
     'Backpiece / Full Torso Project'
   ];
 
-  const budgetOptions = [
-    'Under ₹5,000 (Micro / Fine Line)',
-    '₹5,000 – ₹12,000 (Medium Custom)',
-    '₹12,000 – ₹20,000 (Half-Day / Complex)',
-    '₹20,000 – ₹40,000+ (Full Day / Sleeve)',
-    'Flexible / Quote needed'
+  const projectScopeOptions = [
+    'Micro / Fine Line Project',
+    'Medium Custom Concept',
+    'Half-Day Dedicated Session (Realism / Chest / Calf)',
+    'Full Sleeve / Multi-Session Masterpiece',
+    'Cover-Up & Scar Camouflage',
+    'Request Custom Quote on WhatsApp'
   ];
 
   return (
@@ -121,6 +122,28 @@ export default function Booking() {
         <p className="text-muted text-sm mt-3 leading-relaxed">
           Submit your concept below. Our concierge reviews your inquiry and confirms your session within 4 business hours.
         </p>
+      </div>
+
+      {/* WhatsApp Quick Quote Alternative Banner */}
+      <div className="glass-card p-4 sm:p-5 mb-6 border border-emerald/40 bg-gradient-to-r from-[#072418]/90 via-[#0a2f20]/90 to-[#072418]/90 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="h-11 w-11 rounded-xl bg-emerald/20 text-emerald grid place-items-center shrink-0 border border-emerald/30">
+            <MessageCircle size={22} />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-cream">Prefer an Immediate Price Quote?</h2>
+            <p className="text-xs text-[#a3c4b5] mt-0.5">Skip the form and chat directly with studio admin on WhatsApp for a fast custom quote.</p>
+          </div>
+        </div>
+        <a
+          href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get a fast custom price quote for a tattoo idea.')}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition shrink-0 whitespace-nowrap"
+        >
+          <MessageCircle size={14} />
+          <span>GET QUOTE ON WHATSAPP</span>
+        </a>
       </div>
 
       {/* Safety & Protocol Banner */}
@@ -184,10 +207,10 @@ export default function Booking() {
           <input className="field" placeholder="e.g. Left inner forearm, Collarbone, Ribs" {...register('placement')} />
         </Field>
 
-        <Field label="Estimated Budget Range" hint="Optional">
+        <Field label="Project Scope / Session Goal" hint="Optional">
           <select className="field" {...register('budget')}>
-            <option value="">Select range…</option>
-            {budgetOptions.map(b => <option key={b} value={b}>{b}</option>)}
+            <option value="">Select project scope…</option>
+            {projectScopeOptions.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
         </Field>
 

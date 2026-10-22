@@ -102,17 +102,15 @@ export default function Contact() {
           </div>
 
           <div className="pt-4 border-t border-line flex flex-col gap-3">
-            {s.whatsapp && (
-              <a
-                href={waLink(s.whatsapp, 'Hi Noor Tattooz Studio, I would like to inquire about getting a tattoo at your Una studio.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="clay-btn ghost text-xs flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={16} className="text-emerald-400" />
-                <span>CHAT WITH US ON WHATSAPP</span>
-              </a>
-            )}
+            <a
+              href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get an instant price quote for a tattoo idea.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="clay-btn text-xs flex items-center justify-center gap-2 !bg-[#144230] hover:!bg-[#1c5d43] text-[#55f2a3] border border-[#23704f] shadow-md"
+            >
+              <MessageCircle size={16} className="text-[#55f2a3]" />
+              <span>REQUEST INSTANT QUOTE ON WHATSAPP</span>
+            </a>
 
             <a
               href={s.mapsUrl || 'https://share.google/byos1q4FITCvikbhe'}

@@ -451,18 +451,16 @@ export function Gallery() {
                 Open dedicated page ›
               </Link>
               <div className="flex flex-wrap gap-2">
-                {settings.whatsapp && (
-                  <a
-                    href={waLink(settings.whatsapp, `Hello Noor Tattooz! I am interested in discussing the "${activeModal.title}" design (${activeModal.style}).`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="clay-btn ghost !py-2 !px-3 text-xs flex items-center gap-1.5"
-                  >
-                    <MessageCircle size={14} className="text-emerald-400" />
-                    <span>WhatsApp Inquiry</span>
-                  </a>
-                )}
-                <Link to="/booking" className="clay-btn !py-2 !px-4 text-xs">
+                <a
+                  href={waLink(settings.whatsapp || '8219811181', `Hello Noor Tattooz Studio, I would like to get a custom price quote for "${activeModal.title}" (${activeModal.style}).`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="clay-btn !py-2 !px-3 text-xs flex items-center gap-1.5 !bg-[#144230] hover:!bg-[#1c5d43] text-[#55f2a3] border border-[#23704f]"
+                >
+                  <MessageCircle size={14} className="text-[#55f2a3]" />
+                  <span>Get WhatsApp Quote</span>
+                </a>
+                <Link to="/booking" className="clay-btn ghost !py-2 !px-4 text-xs">
                   BOOK SIMILAR PIECE
                 </Link>
                 <button className="clay-btn ghost !py-2 !px-4 text-xs" onClick={() => setActiveModal(null)}>
@@ -542,20 +540,18 @@ export function GalleryItem() {
               )}
 
               <div className="pt-6 border-t border-line flex flex-wrap gap-4">
-                <Link to="/booking" className="clay-btn">
+                <a
+                  href={waLink(settings.whatsapp || '8219811181', `Hello Noor Tattooz Studio, I would like to get a custom price quote for the "${g.title}" design (${g.style}).`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="clay-btn flex items-center gap-2 !bg-[#144230] hover:!bg-[#1c5d43] text-[#55f2a3] border border-[#23704f]"
+                >
+                  <MessageCircle size={16} className="text-[#55f2a3]" />
+                  <span>GET QUOTE ON WHATSAPP</span>
+                </a>
+                <Link to="/booking" className="clay-btn ghost">
                   REQUEST SIMILAR WORK
                 </Link>
-                {settings.whatsapp && (
-                  <a
-                    href={waLink(settings.whatsapp, `Hello Noor Tattooz! I would like to discuss getting a tattoo like "${g.title}".`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="clay-btn ghost flex items-center gap-2"
-                  >
-                    <MessageCircle size={16} className="text-emerald-400" />
-                    <span>CHAT ON WHATSAPP</span>
-                  </a>
-                )}
                 <Link to="/gallery" className="clay-btn ghost text-xs">
                   BACK TO GALLERY
                 </Link>
@@ -568,34 +564,39 @@ export function GalleryItem() {
   );
 }
 
-// 5. SERVICES & PRICING
+// 5. SERVICES & CUSTOM ESTIMATES
 export function Pricing() {
   const [d, err] = useFetch('/services?limit=50');
+  const [settings, setSettings] = useState({});
+
+  useEffect(() => {
+    api.get('/settings').then(r => setSettings(r.data)).catch(() => {});
+  }, []);
 
   return (
     <Wrap
-      title="Tattoo Services & Transparent Pricing"
-      h="SERVICES & PRICING"
-      sub="Transparent Investment"
-      desc="We believe in complete pricing transparency with zero hidden charges. Every custom tattoo is quoted with precision during your free 1-on-1 consultation."
+      title="Custom Tattoo Estimates & Services"
+      h="TATTOO ESTIMATES & QUOTES"
+      sub="Bespoke Pricing via WhatsApp"
+      desc="Every tattoo at Noor Tattooz Studio is 100% custom-crafted to your anatomy. Receive an immediate, tailored price quote and timeline estimate directly from our studio admin on WhatsApp."
     >
-      {/* Transparency Guarantee Banner */}
-      <div className="clay p-6 mb-12 border border-gold/30 grid md:grid-cols-4 gap-6 text-center">
+      {/* Studio Value & Transparency Banner */}
+      <div className="clay p-6 mb-12 border border-gold/30 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div>
-          <span className="text-2xl font-bold text-gold block">₹3,000</span>
-          <span className="text-xs text-muted">Studio Minimum (Fine Line)</span>
+          <span className="text-xl sm:text-2xl font-bold text-emerald-400 block">Instant Quote</span>
+          <span className="text-xs text-muted">Direct on WhatsApp</span>
         </div>
         <div>
-          <span className="text-2xl font-bold text-gold block">₹0</span>
-          <span className="text-xs text-muted">1-on-1 Consultation</span>
+          <span className="text-xl sm:text-2xl font-bold text-gold block">1-on-1 Studio</span>
+          <span className="text-xs text-muted">Free In-Person Consult</span>
         </div>
         <div>
-          <span className="text-2xl font-bold text-emerald-400 block">100% Free</span>
+          <span className="text-xl sm:text-2xl font-bold text-emerald-400 block">100% Free</span>
           <span className="text-xs text-muted">60-Day Touch-Up</span>
         </div>
         <div>
-          <span className="text-2xl font-bold text-gold block">Included</span>
-          <span className="text-xs text-muted">Saniderm Dermal Shield</span>
+          <span className="text-xl sm:text-2xl font-bold text-gold block">Included</span>
+          <span className="text-xs text-muted">Medical Saniderm Shield</span>
         </div>
       </div>
 
@@ -606,8 +607,8 @@ export function Pricing() {
               <div>
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <h2 className="text-xl font-bold text-cream group-hover:text-gold transition">{s.title}</h2>
-                  <span className="text-base font-bold text-gold whitespace-nowrap">
-                    {s.price > 0 ? `From ₹${s.price.toLocaleString('en-IN')}` : 'Complimentary'}
+                  <span className="text-xs uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-emerald/15 text-emerald border border-emerald/30 whitespace-nowrap">
+                    Custom Quote
                   </span>
                 </div>
 
@@ -632,9 +633,17 @@ export function Pricing() {
                 )}
               </div>
 
-              <div className="pt-4 border-t border-line flex items-center justify-between">
-                <span className="text-[11px] text-muted">Una Studio · Prem Nagar</span>
-                <Link to="/booking" className="clay-btn !py-1.5 !px-3 !text-xs">
+              <div className="pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
+                <a
+                  href={waLink(settings.whatsapp || '8219811181', `Hi Noor Tattooz Studio, I would like to get a custom price quote for "${s.title}".`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#144230] hover:bg-[#1c5d43] text-[#55f2a3] border border-[#23704f] transition shadow"
+                >
+                  <MessageCircle size={13} />
+                  <span>GET QUOTE ON WHATSAPP</span>
+                </a>
+                <Link to="/booking" className="clay-btn ghost !py-1.5 !px-3 !text-xs">
                   BOOK NOW
                 </Link>
               </div>
@@ -643,38 +652,47 @@ export function Pricing() {
         </Grid>
       </State>
 
-      {/* Pricing Matrix Guide */}
-      <section className="clay p-8 mt-16 max-w-3xl mx-auto">
-        <h3 className="text-xl font-bold mb-4 text-center">Standard Session Structure</h3>
-        <div className="divide-y divide-line text-sm">
-          <div className="py-3 flex justify-between items-center">
-            <div>
-              <strong className="text-cream block">Micro & Fine Line Tattoos</strong>
-              <span className="text-xs text-muted">Under 2.5 inches, single needle or script</span>
-            </div>
-            <span className="text-gold font-bold">₹3,000 – ₹5,000</span>
+      {/* 4-Step Instant WhatsApp Quote Guide */}
+      <section className="clay p-8 mt-16 max-w-4xl mx-auto border border-gold/30">
+        <div className="text-center max-w-xl mx-auto mb-8">
+          <span className="text-gold text-xs tracking-[0.25em] uppercase font-bold block mb-1">Fast & Direct</span>
+          <h3 className="text-2xl font-bold font-display text-cream">HOW TO GET AN INSTANT TATTOO QUOTE</h3>
+          <p className="text-xs text-muted mt-1">Get an exact price estimate and timeframe directly from studio admin in 4 quick steps.</p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="glass-card p-4 text-center">
+            <span className="font-display text-2xl font-bold text-gold block mb-2">01</span>
+            <strong className="text-cream text-xs block mb-1">Share Reference Photo</strong>
+            <p className="text-[11px] text-muted leading-tight">Send sketches, inspiration photos, or your concept idea.</p>
           </div>
-          <div className="py-3 flex justify-between items-center">
-            <div>
-              <strong className="text-cream block">Medium Scale Custom Art</strong>
-              <span className="text-xs text-muted">3 to 5 inches, forearm, calf, rib or shoulder</span>
-            </div>
-            <span className="text-gold font-bold">₹6,000 – ₹14,000</span>
+          <div className="glass-card p-4 text-center">
+            <span className="font-display text-2xl font-bold text-gold block mb-2">02</span>
+            <strong className="text-cream text-xs block mb-1">Body Placement</strong>
+            <p className="text-[11px] text-muted leading-tight">Specify where you want it (forearm, neck, chest, back, ankle).</p>
           </div>
-          <div className="py-3 flex justify-between items-center">
-            <div>
-              <strong className="text-cream block">Half-Day Session (3 to 4 Hours)</strong>
-              <span className="text-xs text-muted">Complex realism, portraits, chest panels</span>
-            </div>
-            <span className="text-gold font-bold">₹12,000 – ₹16,000</span>
+          <div className="glass-card p-4 text-center">
+            <span className="font-display text-2xl font-bold text-gold block mb-2">03</span>
+            <strong className="text-cream text-xs block mb-1">Approximate Dimensions</strong>
+            <p className="text-[11px] text-muted leading-tight">Mention approx length/width in inches or centimeters.</p>
           </div>
-          <div className="py-3 flex justify-between items-center">
-            <div>
-              <strong className="text-cream block">Full-Day Project Rate (6 to 8 Hours)</strong>
-              <span className="text-xs text-muted">Full sleeves, backpieces, heavy blackwork projects</span>
-            </div>
-            <span className="text-gold font-bold">₹24,000 – ₹32,000</span>
+          <div className="glass-card p-4 text-center">
+            <span className="font-display text-2xl font-bold text-emerald block mb-2">04</span>
+            <strong className="text-cream text-xs block mb-1">Get Exact Estimate</strong>
+            <p className="text-[11px] text-muted leading-tight">Receive exact pricing, hours required, and appointment slots.</p>
           </div>
+        </div>
+
+        <div className="text-center pt-2">
+          <a
+            href={waLink(settings.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get an instant quote for my tattoo idea. Here are my details:\n- Placement:\n- Approx Size:\n- Style:\n')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-bold bg-[#144230] hover:bg-[#1c5d43] text-[#55f2a3] border border-[#23704f] transition shadow-lg"
+          >
+            <MessageCircle size={18} />
+            <span>REQUEST AN INSTANT ESTIMATE ON WHATSAPP (8219811181)</span>
+          </a>
         </div>
       </section>
     </Wrap>
@@ -996,7 +1014,7 @@ export const Terms = () => (
       </section>
       <section>
         <h2 className="text-lg font-bold text-cream mb-2">2. Deposits & Illustration Work</h2>
-        <p>A deposit (₹2,000 to ₹5,000 depending on project scale) is required to lock your appointment date and initiate bespoke illustration drafting. All deposits are deducted from your final session payment.</p>
+        <p>An appointment deposit (tailored to project scale and design complexity) is required to lock your session date and initiate bespoke illustration drafting. All deposits are fully deducted from your final session payment.</p>
       </section>
       <section>
         <h2 className="text-lg font-bold text-cream mb-2">3. 48-Hour Rescheduling Window</h2>

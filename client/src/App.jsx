@@ -37,7 +37,7 @@ const navLinks = [
   ['/gallery', 'Portfolio'],
   ['/styles', 'Tattoo Styles'],
   ['/process', 'Process & Safety'],
-  ['/pricing', 'Pricing'],
+  ['/pricing', 'Get a Quote'],
   ['/contact', 'Contact']
 ];
 
@@ -72,9 +72,8 @@ function Layout() {
       longitude: '76.2708'
     },
     openingHours: 'Mo-Su 10:00-20:30',
-    priceRange: '₹₹',
     sameAs: [
-      s.instagram || 'https://instagram.com/noor_tattooz',
+      s.instagram || 'https://www.instagram.com/noortattooz',
       s.facebook
     ].filter(Boolean)
   };
@@ -107,13 +106,13 @@ function Layout() {
 
           <div className="flex items-center gap-5">
             <a
-              href="https://instagram.com/noor_tattooz"
+              href={s.instagram || "https://www.instagram.com/noortattooz"}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-silver hover:text-gold transition font-medium"
             >
               <Instagram size={13} className="text-gold" />
-              <span>@noor_tattooz</span>
+              <span>@noortattooz</span>
             </a>
             {s.phone && (
               <a href={`tel:${s.phone.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 text-silver hover:text-gold transition">
@@ -149,7 +148,7 @@ function Layout() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-3 xl:gap-5">
+          <div className="hidden lg:flex items-center gap-2.5 xl:gap-4">
             {navLinks.map(([to, label]) => (
               <NavLink
                 key={to}
@@ -164,6 +163,18 @@ function Layout() {
               </NavLink>
             ))}
 
+            {/* Direct WhatsApp Quote Button */}
+            <a
+              href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get a custom price quote for a tattoo idea.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider bg-emerald/15 hover:bg-emerald/25 text-emerald border border-emerald/40 transition shadow-sm"
+              title="Get a free custom quote on WhatsApp"
+            >
+              <MessageCircle size={13} className="text-emerald" />
+              <span>GET QUOTE</span>
+            </a>
+
             {/* Prominent Call Button in Desktop Navbar */}
             <a
               href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
@@ -175,13 +186,24 @@ function Layout() {
               <span>CALL NOW</span>
             </a>
 
-            <Link to="/booking" className="clay-btn !py-2 !px-4 xl:!py-2.5 xl:!px-5 !text-xs tracking-wider whitespace-nowrap">
+            <Link to="/booking" className="clay-btn !py-2 !px-3.5 xl:!py-2.5 xl:!px-4 !text-xs tracking-wider whitespace-nowrap">
               BOOK SESSION
             </Link>
           </div>
 
           {/* Mobile Right Controls: Call Button + Menu Toggle */}
           <div className="flex items-center gap-2 sm:gap-2.5 lg:hidden">
+            <a
+              href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get a quote for a tattoo idea.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald/20 text-emerald border border-emerald/40 shrink-0"
+              aria-label="Get Quote on WhatsApp"
+            >
+              <MessageCircle size={11} />
+              <span>QUOTE</span>
+            </a>
+
             <a
               href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
               className="glass-call-btn !py-1.5 !px-2.5 !text-xs flex items-center gap-1 shrink-0"
@@ -224,9 +246,20 @@ function Layout() {
             </div>
 
             <a
+              href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get an instant price quote for a tattoo idea.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center gap-2 py-2.5 w-full rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition"
+            >
+              <MessageCircle size={15} />
+              <span>GET QUOTE ON WHATSAPP</span>
+            </a>
+
+            <a
               href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
               onClick={() => setOpen(false)}
-              className="glass-call-btn !py-2.5 !w-full justify-center !text-xs sm:!text-sm flex items-center gap-2 mt-1"
+              className="glass-call-btn !py-2.5 !w-full justify-center !text-xs sm:!text-sm flex items-center gap-2"
             >
               <Phone size={15} className="text-emerald fill-emerald/20" />
               <span>DIRECT CALL: {s.phone || '8219811181'}</span>
@@ -242,12 +275,12 @@ function Layout() {
 
             <div className="pt-1 flex items-center justify-center text-center text-[11px] text-muted">
               <a
-                href="https://instagram.com/noor_tattooz"
+                href={s.instagram || "https://www.instagram.com/noortattooz"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gold flex items-center justify-center gap-1.5 hover:underline"
               >
-                <Instagram size={13} /> Follow on Instagram @noor_tattooz
+                <Instagram size={13} /> Follow on Instagram @noortattooz
               </a>
             </div>
           </div>
@@ -316,13 +349,13 @@ function Layout() {
               A premier custom tattoo atelier on Una Amb Road near Sabji Mandi, Prem Nagar, Una, Himachal Pradesh. Dedicated to bespoke artwork, fine-line elegance, dark realism, and clinical hospital-grade sterility.
             </p>
             <a
-              href="https://instagram.com/noor_tattooz"
+              href={s.instagram || "https://www.instagram.com/noortattooz"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs font-semibold text-gold hover:text-cream transition px-3 py-1.5 rounded-lg bg-[#072017] border border-[#1b3e30]"
             >
               <Instagram size={14} />
-              <span>@noor_tattooz</span>
+              <span>@noortattooz</span>
             </a>
           </div>
 
@@ -334,7 +367,7 @@ function Layout() {
               <li><Link to="/about" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> About Studio</Link></li>
               <li><Link to="/gallery" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Curated Portfolio</Link></li>
               <li><Link to="/styles" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Tattoo Styles</Link></li>
-              <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Pricing & Services</Link></li>
+              <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Custom Quotes & Estimates</Link></li>
               <li><Link to="/booking" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Book a Session</Link></li>
               <li><Link to="/contact" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Contact Atelier</Link></li>
             </ul>
@@ -347,7 +380,7 @@ function Layout() {
               <li><Link to="/process" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> 6-Stage Process</Link></li>
               <li><Link to="/hygiene" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Clinical Sterility</Link></li>
               <li><Link to="/aftercare" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Complete Aftercare</Link></li>
-              <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Services & Rates</Link></li>
+              <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Estimates & Custom Quotes</Link></li>
               <li><Link to="/faq" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Studio FAQ</Link></li>
               <li><Link to="/blog" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Studio Journal</Link></li>
             </ul>

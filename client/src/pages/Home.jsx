@@ -83,6 +83,15 @@ export default function Home() {
                 <span>RESERVE A SESSION</span>
                 <ArrowRight size={15} />
               </Link>
+              <a
+                href={waLink(settings.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get a custom price quote for my tattoo idea.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold bg-[#144230] hover:bg-[#1c5d43] text-[#55f2a3] border border-[#23704f] transition shadow-md"
+              >
+                <span>GET INSTANT QUOTE</span>
+                <span className="text-sm">💬</span>
+              </a>
               <Link to="/gallery" className="clay-btn ghost text-xs sm:text-sm !py-3 !px-5">
                 <span>VIEW PORTFOLIO</span>
               </Link>
@@ -508,12 +517,13 @@ export default function Home() {
             Watch daily behind-the-scenes stencil drafting, fresh piece reveals, and healed client check-ins.
           </p>
           <a
-            href="https://instagram.com/noor_tattooz"
+            href={settings.instagram || "https://www.instagram.com/noortattooz"}
             target="_blank"
             rel="noopener noreferrer"
-            className="clay-btn"
+            className="clay-btn inline-flex items-center gap-2"
           >
-            JOIN @NOOR_TATTOOZ
+            <Instagram size={15} />
+            <span>FOLLOW @NOORTATTOOZ</span>
           </a>
         </div>
       </section>
@@ -533,16 +543,15 @@ export default function Home() {
           <Link to="/booking" className="clay-btn">
             BOOK A CONSULTATION
           </Link>
-          {settings.whatsapp && (
-            <a
-              href={waLink(settings.whatsapp, 'Hi Noor Tattooz, I would like to book a consultation.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="clay-btn ghost"
-            >
-              CHAT ON WHATSAPP
-            </a>
-          )}
+          <a
+            href={waLink(settings.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to request an estimate and discuss my tattoo design on WhatsApp.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="clay-btn ghost inline-flex items-center gap-2"
+          >
+            <span>GET QUOTE ON WHATSAPP</span>
+            <span>💬</span>
+          </a>
         </div>
       </section>
     </>
