@@ -54,7 +54,7 @@ export default function Contact() {
 
       <div className="grid lg:grid-cols-12 gap-10 items-start">
         {/* Studio Info Card */}
-        <div className="lg:col-span-5 clay p-8 space-y-6 border border-line">
+        <div className="lg:col-span-5 glass-card p-8 space-y-6 border border-gold/25">
           <div>
             <span className="text-xs text-gold font-semibold uppercase tracking-widest block mb-1">Location & Atelier</span>
             <h2 className="text-xl font-bold text-cream">{s.businessName || 'Noor Tattooz Studio'}</h2>
@@ -134,7 +134,7 @@ export default function Contact() {
         </div>
 
         {/* Message Form */}
-        <div className="lg:col-span-7 clay p-8 sm:p-10 border border-line">
+        <div className="lg:col-span-7 glass-card p-8 sm:p-10 border border-gold/25">
           <h2 className="text-2xl font-bold mb-2">Send an Inquiry</h2>
           <p className="text-xs text-muted mb-6">
             Fill in the details below and we will get back to you via email or phone within 4 business hours.

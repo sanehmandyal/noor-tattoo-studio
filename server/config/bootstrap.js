@@ -433,36 +433,60 @@ export const autoSeedIfEmpty = async () => {
         {
           name: 'Sahil Sharma',
           rating: 5,
+          service: 'Custom Realism Sleeve',
+          location: 'Una, Himachal Pradesh',
+          verified: true,
+          source: 'Google Maps Review',
           message: 'Best tattoo studio in Una without any doubt! Got a detailed custom sleeve done here. The hygiene is top notch — brand new sealed needles opened right in front of me, and the detailing on the shading came out even better than the stencil. Highly recommended!',
           featured: true
         },
         {
           name: 'Ankush Thakur',
           rating: 5,
+          service: 'Custom Chest & Arm Art',
+          location: 'Una, Himachal Pradesh',
+          verified: true,
+          source: 'Google Maps Review',
           message: 'Best tattoo artist in Una, Himachal Pradesh. Very polite and humble nature. He guided me patiently on placement, design choices, and aftercare. The tattoo healed super clean with no fading. 5 stars without any hesitation!',
           featured: true
         },
         {
           name: 'Pooja Jaswal',
           rating: 5,
+          service: 'Fine Line Botanical',
+          location: 'Prem Nagar, Una',
+          verified: true,
+          source: 'Google Maps Review',
           message: 'Got my first fine line tattoo at Noor Tattooz Studio near Sabji Mandi, Prem Nagar. The artist was so gentle and professional, virtually painless experience. The studio is spotless clean and peaceful.',
           featured: true
         },
         {
           name: 'Rohit Choudhary',
           rating: 5,
+          service: 'Forearm Religious Portrait',
+          location: 'Una Amb Road',
+          verified: true,
+          source: 'Google Maps Review',
           message: 'Undoubtedly the premier tattoo parlor on Una Amb Road. Got a custom religious portrait on my forearm; precision and ink depth is unmatched. Genuine rates and sterile, hospital-grade hygiene.',
           featured: true
         },
         {
           name: 'Vikas Verma',
           rating: 5,
+          service: 'Blackwork Cover-Up Masterpiece',
+          location: 'Una, Himachal Pradesh',
+          verified: true,
+          source: 'Google Maps Review',
           message: 'Visited Noor Tattooz Studio for a cover-up tattoo. He completely transformed my old blurred tattoo into an amazing dark blackwork masterpiece. Very skilled hand and creative mind.',
           featured: true
         },
         {
           name: 'Manish Saini',
           rating: 5,
+          service: 'Geometric Forearm Tattoo',
+          location: 'Una, Himachal Pradesh',
+          verified: true,
+          source: 'Google Maps Review',
           message: 'Awesome experience at Noor Tattooz Una. Great work, hygienic equipment, affordable price and very friendly behavior. Definitely coming back for my next piece!',
           featured: true
         }

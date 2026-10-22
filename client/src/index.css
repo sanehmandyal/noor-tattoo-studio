@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --bg: #04100b;
-  --bg-gradient: radial-gradient(circle at 50% 0%, #0c2b1e 0%, #04100b 70%);
-  --surface: #081d15;
-  --surface-hover: #0e291e;
-  --surface-glass: rgba(8, 29, 21, 0.75);
+  --bg: #030d08;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #0c2b1e 0%, #030d08 70%);
+  --surface: #071912;
+  --surface-hover: #0c251b;
+  --surface-glass: rgba(7, 25, 18, 0.68);
   --accent: #dfb750;
   --accent-gold-light: #fae188;
   --accent-gold-dark: #9b7720;
@@ -16,8 +16,8 @@
   --accent-emerald-glow: rgba(16, 185, 129, 0.35);
   --text: #f2f5f3;
   --muted: #8ea399;
-  --border: #17382a;
-  --border-gold: rgba(223, 183, 80, 0.3);
+  --border: #143526;
+  --border-gold: rgba(223, 183, 80, 0.28);
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
@@ -26,9 +26,11 @@
 body {
   background-color: var(--bg);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(12, 43, 30, 0.5) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(8, 29, 21, 0.4) 0px, transparent 50%),
-    radial-gradient(at 50% 30%, rgba(16, 185, 129, 0.04) 0px, transparent 60%);
+    radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 45%),
+    radial-gradient(at 90% 20%, rgba(223, 183, 80, 0.10) 0px, transparent 40%),
+    radial-gradient(at 50% 60%, rgba(12, 43, 30, 0.45) 0px, transparent 60%),
+    radial-gradient(at 80% 90%, rgba(16, 185, 129, 0.08) 0px, transparent 45%),
+    radial-gradient(at 20% 85%, rgba(223, 183, 80, 0.07) 0px, transparent 40%);
   background-attachment: fixed;
   color: var(--text);
   font-family: Inter, system-ui, sans-serif;
@@ -40,15 +42,110 @@ h1, h2, h3, h4 {
 }
 
 @layer components {
+  /* Glassmorphism Surface Base */
+  .glass {
+    background: rgba(7, 25, 18, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(223, 183, 80, 0.18);
+    box-shadow: 
+      0 12px 32px 0 rgba(0, 0, 0, 0.45),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Glass Card (Frosted Luxury Container) */
+  .glass-card {
+    background: linear-gradient(135deg, rgba(10, 32, 23, 0.72) 0%, rgba(5, 18, 13, 0.82) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(223, 183, 80, 0.22);
+    box-shadow: 
+      0 16px 36px -4px rgba(0, 0, 0, 0.6),
+      0 0 24px rgba(16, 185, 129, 0.06),
+      inset 0 1px 1px rgba(250, 225, 136, 0.2),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(223, 183, 80, 0.5);
+    box-shadow: 
+      0 20px 44px -4px rgba(0, 0, 0, 0.75),
+      0 0 32px rgba(16, 185, 129, 0.16),
+      inset 0 1px 2px rgba(250, 225, 136, 0.35);
+    transform: translateY(-3px);
+  }
+
+  /* Glass Header / Navbar */
+  .glass-header {
+    background: rgba(4, 16, 11, 0.82);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(223, 183, 80, 0.18);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Glass Call Button in Navbar */
+  .glass-call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.775rem;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(223, 183, 80, 0.18) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #f7faf8;
+    border: 1px solid rgba(223, 183, 80, 0.4);
+    box-shadow: 
+      0 4px 14px rgba(0, 0, 0, 0.4),
+      0 0 12px rgba(16, 185, 129, 0.25),
+      inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-call-btn:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.38) 0%, rgba(223, 183, 80, 0.32) 100%);
+    border-color: rgba(250, 225, 136, 0.8);
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.5),
+      0 0 18px rgba(223, 183, 80, 0.45),
+      inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  }
+
+  /* Glass Pill Badge */
+  .glass-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    background: rgba(10, 32, 23, 0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(223, 183, 80, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
   /* Velvet Emerald & Brushed Gold Card */
   .clay {
-    background: linear-gradient(145deg, #0a241b, #061812);
+    background: linear-gradient(145deg, rgba(10, 34, 25, 0.85), rgba(5, 20, 14, 0.92));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-radius: 1.5rem;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(23, 56, 42, 0.9);
     box-shadow: 
       0 16px 36px -8px rgba(0, 0, 0, 0.7),
       0 4px 12px -2px rgba(4, 16, 11, 0.5),
-      inset 0 1px 1px rgba(223, 183, 80, 0.12),
+      inset 0 1px 1px rgba(223, 183, 80, 0.18),
       inset 0 -1px 1px rgba(0, 0, 0, 0.5);
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   }
@@ -57,8 +154,8 @@ h1, h2, h3, h4 {
     border-color: rgba(223, 183, 80, 0.45);
     box-shadow: 
       0 20px 40px -10px rgba(0, 0, 0, 0.8),
-      0 0 20px rgba(16, 185, 129, 0.1),
-      inset 0 1px 2px rgba(223, 183, 80, 0.25);
+      0 0 24px rgba(16, 185, 129, 0.15),
+      inset 0 1px 2px rgba(223, 183, 80, 0.3);
   }
 
   /* Burnished Antique Gold Action Button */
@@ -89,7 +186,7 @@ h1, h2, h3, h4 {
     background: linear-gradient(145deg, #fae08f, #e0b44a 50%, #ad8424);
     box-shadow: 
       0 10px 24px rgba(0, 0, 0, 0.7),
-      0 0 16px rgba(223, 183, 80, 0.4),
+      0 0 20px rgba(223, 183, 80, 0.5),
       inset 0 1px 1px rgba(255, 255, 255, 0.8);
   }
 
@@ -102,12 +199,14 @@ h1, h2, h3, h4 {
 
   /* Platinum Ghost Button */
   .clay-btn.ghost {
-    background: linear-gradient(145deg, #092118, #051610);
+    background: linear-gradient(145deg, rgba(9, 33, 24, 0.75), rgba(5, 22, 16, 0.85));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: #e2e8e5;
     border: 1px solid var(--border);
     box-shadow: 
       0 6px 16px rgba(0, 0, 0, 0.5),
-      inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      inset 0 1px 1px rgba(255, 255, 255, 0.08);
   }
 
   .clay-btn.ghost:hover {
@@ -115,13 +214,15 @@ h1, h2, h3, h4 {
     color: var(--accent);
     box-shadow: 
       0 8px 20px rgba(0, 0, 0, 0.6),
-      0 0 12px rgba(223, 183, 80, 0.2);
+      0 0 16px rgba(223, 183, 80, 0.28);
   }
 
-  /* Form Fields */
+  /* Form Fields with Frosted Glass */
   .field {
     width: 100%;
-    background: #05150f;
+    background: rgba(5, 21, 15, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 0.85rem;
     padding: 0.85rem 1.1rem;
     color: #f2f5f3;
@@ -136,11 +237,11 @@ h1, h2, h3, h4 {
     outline: none;
     border-color: var(--accent);
     box-shadow: 
-      0 0 10px rgba(223, 183, 80, 0.3),
+      0 0 12px rgba(223, 183, 80, 0.35),
       inset 2px 2px 6px rgba(0, 0, 0, 0.7);
   }
 
-  /* Logo Signature Gold Box Border (Like "TATTOOZ" in the logo) */
+  /* Signature Gold Box */
   .gold-box {
     position: relative;
     border: 1px solid rgba(223, 183, 80, 0.5);

@@ -128,17 +128,17 @@ function Layout() {
         </div>
       </div>
 
-      {/* Main Header */}
+      {/* Main Header with Glassmorphism */}
       <header className={`fixed top-0 md:top-[33px] inset-x-0 z-40 transition-all duration-300 ${
-        scrolled ? 'bg-[#04100b]/95 backdrop-blur-md shadow-2xl border-b border-[#17382a]' : 'bg-transparent'
+        scrolled ? 'glass-header' : 'bg-[#04100b]/80 backdrop-blur-md border-b border-[#143526]/60'
       }`}>
         <nav className="max-w-6xl mx-auto flex items-center justify-between px-4 py-2.5" aria-label="Main Navigation">
           <Link to="/" className="flex items-center gap-3.5 group" aria-label="Noor Tattooz Home">
             <img
               src="/logo.png"
               alt="Noor Tattooz Emblem"
-              width="52"
-              height="52"
+              width="50"
+              height="50"
               className="rounded-xl border border-gold/40 shadow-lg group-hover:scale-105 transition-transform bg-[#05150f] p-0.5"
             />
             <div className="flex flex-col">
@@ -152,7 +152,7 @@ function Layout() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-4.5">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-4">
             {navLinks.map(([to, label]) => (
               <NavLink
                 key={to}
@@ -166,25 +166,48 @@ function Layout() {
                 {label}
               </NavLink>
             ))}
+
+            {/* Prominent Call Button in Desktop Navbar */}
+            <a
+              href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
+              className="glass-call-btn"
+              aria-label="Call Noor Tattooz Studio"
+              title="Call Noor Tattooz: 8219811181"
+            >
+              <Phone size={13} className="text-emerald fill-emerald/20 animate-pulse" />
+              <span>CALL NOW</span>
+            </a>
+
             <Link to="/booking" className="clay-btn !py-2 !px-4 xl:!py-2.5 xl:!px-5 !text-xs tracking-wider whitespace-nowrap">
               BOOK SESSION
             </Link>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="lg:hidden p-2 text-cream hover:text-gold focus:outline-none"
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <X size={26} /> : <Menu size={26} />}
-          </button>
+          {/* Mobile Right Controls: Call Button + Menu Toggle */}
+          <div className="flex items-center gap-2.5 lg:hidden">
+            <a
+              href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
+              className="glass-call-btn !py-1.5 !px-3 !text-xs flex items-center gap-1.5"
+              aria-label="Call Noor Tattooz"
+            >
+              <Phone size={13} className="text-emerald fill-emerald/20 animate-pulse" />
+              <span>CALL</span>
+            </a>
+
+            <button
+              className="p-2 text-cream hover:text-gold focus:outline-none"
+              aria-label="Toggle menu"
+              aria-expanded={open}
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          </div>
         </nav>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile Dropdown with Glassmorphism */}
         {open && (
-          <div className="lg:hidden clay m-3 p-6 flex flex-col gap-4 border border-[#1b3d2e] animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="lg:hidden glass m-3 p-6 flex flex-col gap-3.5 rounded-2xl border border-gold/30 animate-in fade-in slide-in-from-top-4 duration-200">
             {navLinks.map(([to, label]) => (
               <Link
                 key={to}
@@ -195,14 +218,25 @@ function Layout() {
                 {label}
               </Link>
             ))}
+
+            <a
+              href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
+              onClick={() => setOpen(false)}
+              className="glass-call-btn !py-3 !w-full justify-center !text-sm flex items-center gap-2 mt-2"
+            >
+              <Phone size={16} className="text-emerald fill-emerald/20" />
+              <span>CALL US: {s.phone || '8219811181'}</span>
+            </a>
+
             <Link
               to="/booking"
               onClick={() => setOpen(false)}
-              className="clay-btn text-center mt-2"
+              className="clay-btn text-center"
             >
               BOOK A SESSION
             </Link>
-            <div className="pt-3 flex flex-col gap-2 text-center text-xs text-muted">
+
+            <div className="pt-2 flex flex-col gap-2 text-center text-xs text-muted">
               <a
                 href="https://instagram.com/noor_tattooz"
                 target="_blank"
@@ -211,11 +245,6 @@ function Layout() {
               >
                 <Instagram size={14} /> Follow on Instagram @noor_tattooz
               </a>
-              {s.phone && (
-                <a href={`tel:${s.phone.replace(/\s+/g, '')}`} className="flex items-center justify-center gap-1.5">
-                  <Phone size={14} /> Call us: {s.phone}
-                </a>
-              )}
             </div>
           </div>
         )}
@@ -231,23 +260,41 @@ function Layout() {
         <Outlet />
       </main>
 
-      {/* Floating WhatsApp Action Button */}
-      {s.whatsapp && (
+      {/* Floating Action Hub (Call + WhatsApp) */}
+      <div
+        className="fixed right-5 z-40 flex flex-col items-center gap-3"
+        style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
+      >
         <a
-          href={waLink(s.whatsapp, 'Hi Noor Tattooz! I would like to book a consultation or ask about a tattoo idea.')}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat on WhatsApp"
-          className="fixed right-5 z-40 h-14 w-14 rounded-full grid place-items-center text-white shadow-2xl hover:scale-110 active:scale-95 transition-transform"
+          href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
+          aria-label="Call Noor Tattooz Studio"
+          title="Direct Call: 8219811181"
+          className="h-12 w-12 rounded-full grid place-items-center text-gold shadow-2xl hover:scale-110 active:scale-95 transition-transform glass border border-gold/40"
           style={{
-            background: 'linear-gradient(135deg, #25D366, #128C7E)',
-            boxShadow: '0 8px 24px rgba(37, 211, 102, 0.4)',
-            bottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))'
+            background: 'linear-gradient(135deg, rgba(8, 30, 21, 0.92), rgba(4, 16, 11, 0.96))',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)'
           }}
         >
-          <MessageCircle size={28} />
+          <Phone size={20} className="text-gold fill-gold/20" />
         </a>
-      )}
+
+        {s.whatsapp && (
+          <a
+            href={waLink(s.whatsapp, 'Hi Noor Tattooz! I would like to book a consultation or ask about a tattoo idea.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat on WhatsApp"
+            title="Chat on WhatsApp"
+            className="h-14 w-14 rounded-full grid place-items-center text-white shadow-2xl hover:scale-110 active:scale-95 transition-transform"
+            style={{
+              background: 'linear-gradient(135deg, #25D366, #128C7E)',
+              boxShadow: '0 8px 24px rgba(37, 211, 102, 0.4)'
+            }}
+          >
+            <MessageCircle size={28} />
+          </a>
+        )}
+      </div>
 
       {/* Luxury Forest Emerald & Burnished Gold Footer */}
       <footer className="border-t border-[#17382a] bg-[#020b07] mt-24 pt-16 pb-12">
@@ -336,7 +383,7 @@ function Layout() {
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="hover:text-cream transition">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-cream transition">Studio Terms & Policies</Link>
-            <Link to="/admin" className="text-gold/60 hover:text-gold transition">Staff Portal</Link>
+            <Link to="/admin" className="text-gold/60 hover:text-gold transition">Admin Panel</Link>
           </div>
         </div>
       </footer>

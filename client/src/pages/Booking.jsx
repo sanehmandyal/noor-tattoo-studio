@@ -139,22 +139,22 @@ export default function Booking() {
       </div>
 
       {/* Safety & Protocol Banner */}
-      <div className="clay p-4 mb-8 flex flex-wrap items-center justify-between gap-4 text-xs text-muted border border-line">
-        <span className="flex items-center gap-1.5 text-cream">
-          <ShieldCheck size={16} className="text-emerald-400" />
+      <div className="glass-card p-4 mb-8 flex flex-wrap items-center justify-between gap-4 text-xs text-muted border border-gold/20">
+        <span className="flex items-center gap-1.5 text-cream font-medium">
+          <ShieldCheck size={16} className="text-emerald" />
           Strictly 18+ with Valid ID
         </span>
-        <span className="flex items-center gap-1.5 text-cream">
+        <span className="flex items-center gap-1.5 text-cream font-medium">
           <Sparkles size={15} className="text-gold" />
           Free Design Stencil Included
         </span>
-        <span className="flex items-center gap-1.5 text-cream">
-          <CheckCircle2 size={15} className="text-emerald-400" />
+        <span className="flex items-center gap-1.5 text-cream font-medium">
+          <CheckCircle2 size={15} className="text-emerald" />
           60-Day Touch-Up Guarantee
         </span>
       </div>
 
-      <form onSubmit={handleSubmit(submit)} noValidate className="clay p-6 sm:p-10 grid sm:grid-cols-2 gap-5 border border-line">
+      <form onSubmit={handleSubmit(submit)} noValidate className="glass-card p-6 sm:p-10 grid sm:grid-cols-2 gap-5 border border-gold/25">
         <Field label="Full Name" error={errors.name}>
           <input className="field" placeholder="e.g. Ayesha Kapur" {...register('name')} autoComplete="name" />
         </Field>

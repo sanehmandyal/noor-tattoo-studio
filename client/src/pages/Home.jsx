@@ -22,7 +22,7 @@ export default function Home() {
     api.get('/gallery?featured=true&limit=6').then(r => setFeaturedGallery(r.data.items || [])).catch(() => {});
     api.get('/artists?limit=4').then(r => setArtists(r.data.items || [])).catch(() => {});
     api.get('/services?limit=6').then(r => setServices(r.data.items || [])).catch(() => {});
-    api.get('/testimonials?limit=3').then(r => setTestimonials(r.data.items || [])).catch(() => {});
+    api.get('/testimonials?limit=20').then(r => setTestimonials(r.data.items || [])).catch(() => {});
     api.get('/blog?limit=3').then(r => setPosts(r.data.items || [])).catch(() => {});
     api.get('/faqs?limit=4').then(r => setFaqs(r.data.items || [])).catch(() => {});
   }, []);
@@ -109,24 +109,24 @@ export default function Home() {
             </div>
 
             {/* Trust Highlights */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-[#17382a]">
-              <div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#17382a]">
+              <div className="glass-card p-3.5 text-center border-gold/15">
                 <span className="font-display text-2xl sm:text-3xl font-bold text-gold block">Una</span>
-                <span className="text-xs text-muted">Prem Nagar Studio</span>
+                <span className="text-[11px] text-muted">Prem Nagar Studio</span>
               </div>
-              <div>
+              <div className="glass-card p-3.5 text-center border-gold/15">
                 <span className="font-display text-2xl sm:text-3xl font-bold text-gold block">100%</span>
-                <span className="text-xs text-muted">Custom Artworks</span>
+                <span className="text-[11px] text-muted">Custom Artworks</span>
               </div>
-              <div>
-                <span className="font-display text-2xl sm:text-3xl font-bold text-gold block flex items-center gap-1">
-                  5.0 <Star size={16} className="fill-gold text-gold" />
+              <div className="glass-card p-3.5 text-center border-gold/15">
+                <span className="font-display text-2xl sm:text-3xl font-bold text-gold block flex items-center justify-center gap-1">
+                  5.0 <Star size={15} className="fill-gold text-gold" />
                 </span>
-                <span className="text-xs text-muted">Google Maps Reviews</span>
+                <span className="text-[11px] text-muted">Google Reviews</span>
               </div>
-              <div>
+              <div className="glass-card p-3.5 text-center border-emerald/25">
                 <span className="font-display text-2xl sm:text-3xl font-bold text-emerald block">100%</span>
-                <span className="text-xs text-muted">Sterile Single-Use</span>
+                <span className="text-[11px] text-muted">Sterile Single-Use</span>
               </div>
             </div>
           </motion.div>
@@ -188,7 +188,7 @@ export default function Home() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="clay p-6 relative group hover:-translate-y-1 transition duration-300">
+          <div className="glass-card p-6 relative group hover:-translate-y-1 transition duration-300">
             <div className="h-12 w-12 rounded-xl bg-gold/15 text-gold grid place-items-center mb-5 border border-gold/30">
               <Feather size={24} />
             </div>
@@ -198,7 +198,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="clay p-6 relative group hover:-translate-y-1 transition duration-300">
+          <div className="glass-card p-6 relative group hover:-translate-y-1 transition duration-300">
             <div className="h-12 w-12 rounded-xl bg-emerald/15 text-emerald grid place-items-center mb-5 border border-emerald/30">
               <ShieldCheck size={24} />
             </div>
@@ -208,7 +208,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="clay p-6 relative group hover:-translate-y-1 transition duration-300">
+          <div className="glass-card p-6 relative group hover:-translate-y-1 transition duration-300">
             <div className="h-12 w-12 rounded-xl bg-gold/15 text-gold grid place-items-center mb-5 border border-gold/30">
               <Coffee size={24} />
             </div>
@@ -218,7 +218,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="clay p-6 relative group hover:-translate-y-1 transition duration-300">
+          <div className="glass-card p-6 relative group hover:-translate-y-1 transition duration-300">
             <div className="h-12 w-12 rounded-xl bg-emerald/15 text-emerald grid place-items-center mb-5 border border-emerald/30">
               <Award size={24} />
             </div>
@@ -305,7 +305,7 @@ export default function Home() {
               <Link
                 key={s.name}
                 to={`/styles/${s.slug}`}
-                className="clay p-6 group hover:border-gold/60 transition-all flex flex-col justify-between"
+                className="glass-card p-6 group hover:border-gold/60 transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="h-44 w-full rounded-xl overflow-hidden mb-5 bg-[#0a2218]">
@@ -343,7 +343,7 @@ export default function Home() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {artists.map(a => (
-              <article key={a._id} className="clay p-5 flex flex-col justify-between group hover:-translate-y-1 transition duration-300">
+              <article key={a._id} className="glass-card p-5 flex flex-col justify-between group hover:-translate-y-1 transition duration-300">
                 <div>
                   <div className="relative aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-[#0a2218]">
                     <img src={img(a.image)} alt={a.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
@@ -390,7 +390,7 @@ export default function Home() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {steps.map(step => (
-              <div key={step.num} className="clay p-6 relative">
+              <div key={step.num} className="glass-card p-6 relative">
                 <span className="font-display text-4xl font-bold text-gold/30 block mb-4">
                   {step.num}
                 </span>
@@ -429,40 +429,101 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Client Reviews */}
-      <section className="py-20 max-w-6xl mx-auto px-4">
+      {/* Client Reviews - Elevated Google Maps Honest Feedback */}
+      <section className="py-24 max-w-6xl mx-auto px-4 relative">
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-96 h-48 bg-gold/5 blur-3xl rounded-full pointer-events-none -z-10" />
+
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-gold text-xs tracking-[0.3em] uppercase block mb-2 font-semibold">5.0 Star Google Maps Reviews</span>
-          <h2 className="text-3xl sm:text-4xl font-bold">CLIENT EXPERIENCES</h2>
-          <p className="text-muted text-sm mt-3">
-            Read verified reviews from clients who got inked at Noor Tattooz Studio on Una Amb Road, Prem Nagar.
+          <div className="inline-flex items-center gap-2 glass-pill mb-3">
+            <span className="flex text-gold">★★★★★</span>
+            <span className="text-cream font-bold">5.0 Star Rated on Google Maps</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold font-display tracking-tight text-cream">
+            HONEST REVIEWS FROM REAL CLIENTS
+          </h2>
+          <p className="text-muted text-sm mt-3 leading-relaxed">
+            Real feedback from clients who got inked at Noor Tattooz Studio on Una Amb Road, near Sabji Mandi, Prem Nagar. Every review reflects authentic studio sessions.
           </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={settings.mapsUrl || "https://share.google/byos1q4FITCvikbhe"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-gold hover:text-cream underline font-semibold inline-flex items-center gap-1.5"
+            >
+              <span>View live Google Maps business profile</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {testimonials.map(t => (
-            <article key={t._id} className="clay p-6 flex flex-col justify-between">
+            <article key={t._id} className="glass-card p-6 flex flex-col justify-between group hover:border-gold/50 transition duration-300">
               <div>
-                <div className="flex items-center gap-1 text-gold mb-4">
-                  {[...Array(t.rating || 5)].map((_, i) => (
-                    <Star key={i} size={16} className="fill-gold" />
-                  ))}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-1 text-gold">
+                    {[...Array(t.rating || 5)].map((_, i) => (
+                      <Star key={i} size={15} className="fill-gold" />
+                    ))}
+                  </div>
+                  {t.service && (
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30">
+                      {t.service}
+                    </span>
+                  )}
                 </div>
-                <p className="text-sm text-cream/95 leading-relaxed italic">
+                <p className="text-sm text-cream/90 leading-relaxed italic relative">
                   “{t.message}”
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#17382a] flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-semibold text-cream">{t.name}</h4>
-                  <span className="text-[11px] text-emerald flex items-center gap-1 mt-0.5 font-medium">
-                    <CheckCircle2 size={12} /> Google Verified Review
-                  </span>
+
+              <div className="mt-6 pt-4 border-t border-[#17382a] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-gradient-to-br from-gold/30 to-emerald/30 border border-gold/40 grid place-items-center font-display font-bold text-cream text-xs shrink-0">
+                    {t.name ? t.name.charAt(0) : 'C'}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-cream">{t.name}</h4>
+                    <span className="text-[11px] text-emerald flex items-center gap-1 font-medium">
+                      <CheckCircle2 size={12} /> {t.source || 'Google Verified Review'}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-xs text-muted">Una Studio</span>
+                <span className="text-[11px] text-muted text-right shrink-0">
+                  {t.location || 'Una Studio'}
+                </span>
               </div>
             </article>
           ))}
+        </div>
+
+        {/* Action Callouts */}
+        <div className="glass-card p-6 border border-gold/25 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-center sm:text-left">
+            <h3 className="text-base font-bold text-cream">Loved your experience with Noor Tattooz?</h3>
+            <p className="text-xs text-muted mt-0.5">Help others in Una discover honest tattoo craftsmanship by sharing your review.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <a
+              href={settings.mapsUrl || "https://share.google/byos1q4FITCvikbhe"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="clay-btn text-xs !py-2.5 !px-4 inline-flex items-center gap-2"
+            >
+              <span>WRITE A GOOGLE REVIEW</span>
+              <span aria-hidden="true">✍</span>
+            </a>
+            <a
+              href={settings.mapsUrl || "https://share.google/byos1q4FITCvikbhe"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="clay-btn ghost text-xs !py-2.5 !px-4 inline-flex items-center gap-2"
+            >
+              <span>READ ALL ON GOOGLE MAPS</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -480,7 +541,7 @@ export default function Home() {
 
             <div className="space-y-4 mb-8">
               {faqs.map(f => (
-                <details key={f._id} className="clay p-5 group open:border-gold/40">
+                <details key={f._id} className="glass-card p-5 group open:border-gold/40">
                   <summary className="font-semibold text-cream text-sm sm:text-base cursor-pointer list-none flex items-center justify-between gap-4">
                     <span>{f.question}</span>
                     <span className="text-gold text-base transition-transform group-open:rotate-45 shrink-0">+</span>
