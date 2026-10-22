@@ -25,8 +25,13 @@ function Login({ onLogin }) {
   };
   return (
     <div className="min-h-screen grid place-items-center p-4">
-      <form onSubmit={go} className="glass-card p-8 w-full max-w-sm grid gap-4 border border-gold/30">
-        <img src="/logo.png" alt="Noor Tattoo Studio" width="96" height="96" className="mx-auto rounded-full border border-gold/40 shadow-lg shadow-gold/10" />
+      <form onSubmit={go} className="glass-card p-8 w-full max-w-sm grid gap-4 border border-gold/30 shadow-2xl">
+        <div className="flex justify-start">
+          <a href="/" className="inline-flex items-center gap-1.5 text-xs font-medium text-silver hover:text-gold transition">
+            <span>← Return to Studio Website</span>
+          </a>
+        </div>
+        <img src="/logo.png" alt="Noor Tattoo Studio" width="84" height="84" className="mx-auto rounded-full border border-gold/40 shadow-lg shadow-gold/10" />
         <h1 className="text-2xl text-center font-display font-bold text-cream">Admin Control Panel</h1>
         <p className="text-xs text-muted text-center -mt-2">Sign in to manage studio bookings, gallery & content</p>
         <label className="grid gap-1 text-xs text-muted font-medium">Email Address
@@ -37,7 +42,10 @@ function Login({ onLogin }) {
         </label>
         {err && <p role="alert" className="text-[var(--error)] text-xs">{err}</p>}
         <button className="clay-btn w-full mt-2">SIGN IN TO STUDIO PANEL</button>
-        <a href="/admin/forgot" className="text-gold underline text-xs text-center">Forgot password?</a>
+        <div className="flex items-center justify-between text-xs pt-1">
+          <a href="/admin/forgot" className="text-gold underline">Forgot password?</a>
+          <a href="/" className="text-silver hover:underline">Back to site</a>
+        </div>
       </form>
     </div>
   );
@@ -213,7 +221,6 @@ const TABS = [
   { id: 'bookings', label: 'Bookings' },
   { id: 'inquiries', label: 'Inquiries' },
   { id: 'gallery', label: 'Portfolio Works' },
-  { id: 'artists', label: 'Artists' },
   { id: 'services', label: 'Services & Pricing' },
   { id: 'testimonials', label: 'Honest Reviews' },
   { id: 'faqs', label: 'FAQs' },
@@ -248,6 +255,25 @@ function Dashboard() {
         <meta name="robots" content="noindex" />
       </Helmet>
 
+      {/* Return to Public Website Access Bar */}
+      <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#143526]">
+        <a
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-cream bg-[#082217] hover:bg-[#0e3525] border border-gold/30 hover:border-gold px-3.5 py-2 rounded-xl transition shadow-sm"
+        >
+          <span>← Return to Public Website</span>
+        </a>
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-silver hover:text-gold transition inline-flex items-center gap-1.5"
+        >
+          <span>Open Site in New Tab</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
       {/* Admin Top Glass Header */}
       <header className="glass-card p-5 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border border-gold/25">
         <div>
@@ -266,11 +292,9 @@ function Dashboard() {
         <div className="flex items-center gap-3">
           <a
             href="/"
-            target="_blank"
-            rel="noopener noreferrer"
             className="clay-btn ghost text-xs inline-flex items-center gap-1.5 !py-2.5 !px-4"
           >
-            <span>VIEW LIVE WEBSITE</span>
+            <span>VIEW LIVE SITE</span>
             <span aria-hidden="true">↗</span>
           </a>
           <button

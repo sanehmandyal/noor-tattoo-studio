@@ -364,7 +364,7 @@ export function Gallery() {
               <div className="p-4">
                 <h3 className="text-base font-bold text-cream group-hover:text-gold transition">{piece.title}</h3>
                 <p className="text-xs text-muted mt-1">
-                  Artist: <span className="text-cream">{piece.artist?.name || 'Resident Master'}</span>
+                  Studio: <span className="text-cream">Noor Tattooz Atelier</span>
                 </p>
                 <div className="mt-3 flex items-center justify-between text-xs text-gold">
                   <span>View Details & Specs</span>
@@ -524,7 +524,7 @@ export function GalleryItem() {
 
               <h2 className="text-3xl font-bold mb-4">{g.title}</h2>
               <p className="text-sm text-muted mb-4">
-                Resident Artist: <strong className="text-cream">{g.artist?.name || 'Noor Tattooz Resident'}</strong>
+                Crafted At: <strong className="text-cream">Noor Tattooz Studio Una (H.P.)</strong>
               </p>
 
               <div className="text-sm text-muted leading-relaxed whitespace-pre-line mb-6">
@@ -931,7 +931,7 @@ export const About = () => (
               <Award size={26} />
             </div>
             <h4 className="font-bold text-sm text-cream mb-1">Bloodborne Certified</h4>
-            <p className="text-xs text-muted">Every resident artist maintains up-to-date WHO and Red Cross pathogen safety credentials.</p>
+            <p className="text-xs text-muted">Our studio maintains up-to-date WHO and Red Cross hospital-grade pathogen safety credentials.</p>
           </div>
         </div>
       </div>

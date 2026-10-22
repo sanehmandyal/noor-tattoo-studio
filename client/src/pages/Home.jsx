@@ -10,7 +10,6 @@ import { SEO } from '../App.jsx';
 
 export default function Home() {
   const [featuredGallery, setFeaturedGallery] = useState([]);
-  const [artists, setArtists] = useState([]);
   const [services, setServices] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -20,7 +19,6 @@ export default function Home() {
   useEffect(() => {
     api.get('/settings').then(r => setSettings(r.data)).catch(() => {});
     api.get('/gallery?featured=true&limit=6').then(r => setFeaturedGallery(r.data.items || [])).catch(() => {});
-    api.get('/artists?limit=4').then(r => setArtists(r.data.items || [])).catch(() => {});
     api.get('/services?limit=6').then(r => setServices(r.data.items || [])).catch(() => {});
     api.get('/testimonials?limit=20').then(r => setTestimonials(r.data.items || [])).catch(() => {});
     api.get('/blog?limit=3').then(r => setPosts(r.data.items || [])).catch(() => {});
@@ -80,52 +78,43 @@ export default function Home() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-4 mb-12">
-              <Link to="/booking" className="clay-btn">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-10">
+              <Link to="/booking" className="clay-btn text-xs sm:text-sm !py-3 !px-6">
                 <span>RESERVE A SESSION</span>
-                <ArrowRight size={16} />
+                <ArrowRight size={15} />
               </Link>
-              <Link to="/gallery" className="clay-btn ghost">
+              <Link to="/gallery" className="clay-btn ghost text-xs sm:text-sm !py-3 !px-5">
                 <span>VIEW PORTFOLIO</span>
               </Link>
               <a
                 href={settings.mapsUrl || "https://share.google/byos1q4FITCvikbhe"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-silver hover:text-gold transition px-3.5 py-2.5 rounded-xl bg-[#082017] border border-[#1b3e30]"
+                className="glass-pill !py-2.5 !px-3.5 hover:border-gold transition text-xs font-semibold inline-flex items-center gap-1.5"
               >
-                <Star size={14} className="fill-gold text-gold" />
-                <span>5.0 on Google Maps</span>
-              </a>
-              <a
-                href="https://instagram.com/noor_tattooz"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-silver hover:text-gold transition px-3 py-2.5 rounded-xl bg-[#082017] border border-[#1b3e30]"
-              >
-                <Instagram size={15} className="text-gold" />
-                <span>@noor_tattooz</span>
+                <Star size={13} className="fill-gold text-gold" />
+                <span className="text-cream">5.0 Star on Google Maps</span>
               </a>
             </div>
 
             {/* Trust Highlights */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#17382a]">
-              <div className="glass-card p-3.5 text-center border-gold/15">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-gold block">Una</span>
-                <span className="text-[11px] text-muted">Prem Nagar Studio</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-6 border-t border-[#17382a]/70">
+              <div className="glass-card p-3 text-center border-gold/15">
+                <span className="font-display text-xl sm:text-2xl font-bold text-gold block">Una</span>
+                <span className="text-[11px] text-muted">Prem Nagar Atelier</span>
               </div>
-              <div className="glass-card p-3.5 text-center border-gold/15">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-gold block">100%</span>
+              <div className="glass-card p-3 text-center border-gold/15">
+                <span className="font-display text-xl sm:text-2xl font-bold text-gold block">100%</span>
                 <span className="text-[11px] text-muted">Custom Artworks</span>
               </div>
-              <div className="glass-card p-3.5 text-center border-gold/15">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-gold block flex items-center justify-center gap-1">
-                  5.0 <Star size={15} className="fill-gold text-gold" />
+              <div className="glass-card p-3 text-center border-gold/15">
+                <span className="font-display text-xl sm:text-2xl font-bold text-gold block flex items-center justify-center gap-1">
+                  5.0 <Star size={14} className="fill-gold text-gold" />
                 </span>
                 <span className="text-[11px] text-muted">Google Reviews</span>
               </div>
-              <div className="glass-card p-3.5 text-center border-emerald/25">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-emerald block">100%</span>
+              <div className="glass-card p-3 text-center border-emerald/25">
+                <span className="font-display text-xl sm:text-2xl font-bold text-emerald block">100%</span>
                 <span className="text-[11px] text-muted">Sterile Single-Use</span>
               </div>
             </div>
@@ -139,35 +128,35 @@ export default function Home() {
             className="lg:col-span-5 relative"
           >
             <div className="relative mx-auto max-w-md">
-              <div className="absolute -inset-5 rounded-[2.5rem] bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.3)_0%,_rgba(223,183,80,0.15)_50%,_transparent_75%)] blur-2xl -z-10" />
-              <div className="clay p-3.5 relative overflow-hidden rounded-[2rem] border border-gold/50 shadow-2xl bg-gradient-to-b from-[#0a271d] via-[#051710] to-[#030e09]">
-                <div className="relative aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-[#071d15]">
+              <div className="absolute -inset-4 rounded-[2.5rem] bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.25)_0%,_rgba(223,183,80,0.12)_50%,_transparent_75%)] blur-2xl -z-10" />
+              <div className="glass-card p-3 relative overflow-hidden rounded-[2rem] border border-gold/30 shadow-2xl">
+                <div className="relative aspect-[4/5] rounded-[1.4rem] overflow-hidden bg-[#071d15]">
                   <img
                     src="/hero-tattoo.jpg"
                     alt="Master Tattoo Artist Crafting Custom Ink at Noor Tattooz Studio Una"
                     width="600"
                     height="750"
-                    className="w-full h-full object-cover shadow-2xl"
+                    className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020b07]/90 via-[#020b07]/10 to-transparent pointer-events-none" />
 
                   {/* Live Atelier Badge */}
-                  <div className="absolute top-4 right-4 bg-[#04120c]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold/40 flex items-center gap-2 shadow-lg">
+                  <div className="absolute top-3.5 right-3.5 bg-[#04120c]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold/30 flex items-center gap-2 shadow-lg">
                     <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
-                    <span className="text-[11px] font-semibold text-silver tracking-wider uppercase">Live Studio</span>
+                    <span className="text-[10px] font-semibold text-silver tracking-wider uppercase">Prem Nagar Studio</span>
                   </div>
 
                   {/* Bottom Information Card */}
-                  <div className="absolute bottom-4 inset-x-4 bg-[#04120c]/95 backdrop-blur-md p-4 rounded-xl border border-[#1b3d2f] text-left flex items-center justify-between shadow-xl">
+                  <div className="absolute bottom-3.5 inset-x-3.5 bg-[#04120c]/90 backdrop-blur-md p-3.5 rounded-xl border border-[#1b3d2f] text-left flex items-center justify-between shadow-xl">
                     <div>
-                      <p className="text-[11px] tracking-widest text-gold uppercase font-bold">Noor Tattooz Studio</p>
+                      <p className="text-[10px] tracking-widest text-gold uppercase font-bold">Noor Tattooz Atelier</p>
                       <p className="text-xs font-medium text-silver mt-0.5">Una Amb Road · Prem Nagar (H.P.)</p>
                     </div>
                     <Link
                       to="/gallery"
-                      className="text-xs font-semibold text-gold hover:text-cream transition flex items-center gap-1"
+                      className="text-xs font-semibold text-gold hover:text-cream transition flex items-center gap-0.5"
                     >
-                      Portfolio ›
+                      Gallery ›
                     </Link>
                   </div>
                 </div>
@@ -323,59 +312,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Resident Artists Showcase */}
-      {artists.length > 0 && (
-        <section className="py-20 max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-            <div>
-              <span className="text-gold text-xs tracking-[0.3em] uppercase block mb-2 font-semibold">Resident Masters</span>
-              <h2 className="text-3xl sm:text-4xl font-bold">THE ARTISTS BEHIND THE MACHINE</h2>
-              <p className="text-muted text-sm mt-2">
-                Each master brings decades of dedicated fine art training, distinct styles, and sterile precision.
-              </p>
-            </div>
-            <Link to="/artists" className="clay-btn ghost !py-2.5 !px-5 text-xs flex items-center gap-2 self-start md:self-auto">
-              <span>MEET ALL ARTISTS</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {artists.map(a => (
-              <article key={a._id} className="glass-card p-5 flex flex-col justify-between group hover:-translate-y-1 transition duration-300">
-                <div>
-                  <div className="relative aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-[#0a2218]">
-                    <img src={img(a.image)} alt={a.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                    <span className="absolute top-2.5 right-2.5 bg-emerald-500/90 text-white text-[9px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider shadow">
-                      {a.status || 'Available'}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-cream group-hover:text-gold transition">{a.name}</h3>
-                  <p className="text-xs text-gold font-medium mt-0.5">{a.experience} Years Mastery</p>
-                  <p className="text-xs text-muted/90 line-clamp-2 mt-2 leading-relaxed">{a.bio}</p>
-                  <div className="flex flex-wrap gap-1 mt-3">
-                    {a.styles?.slice(0, 2).map(st => (
-                      <span key={st} className="text-[10px] px-2 py-0.5 rounded bg-[#0a2016] text-silver border border-[#143024]">
-                        {st}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-5 pt-3 border-t border-[#17382a] flex items-center justify-between text-xs">
-                  <Link to={`/artists/${a.slug}`} className="text-gold hover:underline font-semibold flex items-center gap-0.5">
-                    Profile <ChevronRight size={12} />
-                  </Link>
-                  <Link to={`/booking?artist=${a._id}`} className="clay-btn !py-1 !px-2.5 !text-[10px]">
-                    BOOK
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* The 4-Step Journey */}
       <section className="py-20 bg-[#030f0a] border-y border-[#17382a]">

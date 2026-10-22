@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Routes, Route, Link, NavLink, Outlet } from 'react-router-dom';
+import { Routes, Route, Link, NavLink, Outlet, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Menu, X, MessageCircle, MapPin, Phone, Mail, Clock, ShieldCheck,
@@ -33,13 +33,10 @@ export const SEO = ({ title, description }) => (
 
 const navLinks = [
   ['/', 'Home'],
-  ['/about', 'About Studio'],
-  ['/artists', 'Artists'],
-  ['/styles', 'Tattoo Styles'],
+  ['/about', 'About'],
   ['/gallery', 'Portfolio'],
-  ['/process', 'Process'],
-  ['/hygiene', 'Hygiene & Safety'],
-  ['/aftercare', 'Aftercare'],
+  ['/styles', 'Tattoo Styles'],
+  ['/process', 'Process & Safety'],
   ['/pricing', 'Pricing'],
   ['/contact', 'Contact']
 ];
@@ -132,27 +129,27 @@ function Layout() {
       <header className={`fixed top-0 md:top-[33px] inset-x-0 z-40 transition-all duration-300 ${
         scrolled ? 'glass-header' : 'bg-[#04100b]/80 backdrop-blur-md border-b border-[#143526]/60'
       }`}>
-        <nav className="max-w-6xl mx-auto flex items-center justify-between px-4 py-2.5" aria-label="Main Navigation">
-          <Link to="/" className="flex items-center gap-3.5 group" aria-label="Noor Tattooz Home">
+        <nav className="max-w-6xl mx-auto flex items-center justify-between px-3.5 sm:px-4 py-2 sm:py-2.5" aria-label="Main Navigation">
+          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0" aria-label="Noor Tattooz Home">
             <img
               src="/logo.png"
               alt="Noor Tattooz Emblem"
-              width="50"
-              height="50"
-              className="rounded-xl border border-gold/40 shadow-lg group-hover:scale-105 transition-transform bg-[#05150f] p-0.5"
+              width="44"
+              height="44"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-gold/40 shadow-md group-hover:scale-105 transition-transform bg-[#05150f] p-0.5 object-cover shrink-0"
             />
             <div className="flex flex-col">
-              <span className="font-display font-bold tracking-[0.22em] text-lg text-silver leading-tight group-hover:text-gold transition">
+              <span className="font-display font-bold tracking-[0.18em] text-base sm:text-lg text-silver leading-tight group-hover:text-gold transition">
                 NOOR
               </span>
-              <div className="inline-block border border-gold/60 px-1.5 py-0.2 text-[9px] font-bold tracking-[0.2em] text-gold uppercase rounded-sm bg-[#0a2016]/80 mt-0.5">
+              <div className="inline-block border border-gold/60 px-1 py-0.2 text-[8px] sm:text-[9px] font-bold tracking-[0.18em] text-gold uppercase rounded-sm bg-[#0a2016]/80 mt-0.5">
                 TATTOOZ
               </div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-4">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-5">
             {navLinks.map(([to, label]) => (
               <NavLink
                 key={to}
@@ -184,66 +181,73 @@ function Layout() {
           </div>
 
           {/* Mobile Right Controls: Call Button + Menu Toggle */}
-          <div className="flex items-center gap-2.5 lg:hidden">
+          <div className="flex items-center gap-2 sm:gap-2.5 lg:hidden">
             <a
               href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
-              className="glass-call-btn !py-1.5 !px-3 !text-xs flex items-center gap-1.5"
+              className="glass-call-btn !py-1.5 !px-2.5 !text-xs flex items-center gap-1 shrink-0"
               aria-label="Call Noor Tattooz"
             >
-              <Phone size={13} className="text-emerald fill-emerald/20 animate-pulse" />
+              <Phone size={12} className="text-emerald fill-emerald/20 animate-pulse" />
               <span>CALL</span>
             </a>
 
             <button
-              className="p-2 text-cream hover:text-gold focus:outline-none"
+              className="p-1.5 sm:p-2 text-cream hover:text-gold focus:outline-none shrink-0"
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen(!open)}
             >
-              {open ? <X size={26} /> : <Menu size={26} />}
+              {open ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </nav>
 
         {/* Mobile Dropdown with Glassmorphism */}
         {open && (
-          <div className="lg:hidden glass m-3 p-6 flex flex-col gap-3.5 rounded-2xl border border-gold/30 animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="lg:hidden glass m-3 p-5 flex flex-col gap-3 rounded-2xl border border-gold/30 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
             {navLinks.map(([to, label]) => (
               <Link
                 key={to}
                 to={to}
                 onClick={() => setOpen(false)}
-                className="text-cream hover:text-gold text-base py-1 border-b border-[#132c21]"
+                className="text-cream hover:text-gold text-sm sm:text-base py-1.5 border-b border-[#132c21] transition"
               >
                 {label}
               </Link>
             ))}
 
+            <div className="grid grid-cols-2 gap-2 pt-2 border-b border-[#132c21] pb-3 text-xs text-silver">
+              <Link to="/hygiene" onClick={() => setOpen(false)} className="hover:text-gold">› Clinical Sterility</Link>
+              <Link to="/aftercare" onClick={() => setOpen(false)} className="hover:text-gold">› Tattoo Aftercare</Link>
+              <Link to="/faq" onClick={() => setOpen(false)} className="hover:text-gold">› Studio FAQ</Link>
+              <Link to="/about" onClick={() => setOpen(false)} className="hover:text-gold">› About Studio</Link>
+            </div>
+
             <a
               href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
               onClick={() => setOpen(false)}
-              className="glass-call-btn !py-3 !w-full justify-center !text-sm flex items-center gap-2 mt-2"
+              className="glass-call-btn !py-2.5 !w-full justify-center !text-xs sm:!text-sm flex items-center gap-2 mt-1"
             >
-              <Phone size={16} className="text-emerald fill-emerald/20" />
-              <span>CALL US: {s.phone || '8219811181'}</span>
+              <Phone size={15} className="text-emerald fill-emerald/20" />
+              <span>DIRECT CALL: {s.phone || '8219811181'}</span>
             </a>
 
             <Link
               to="/booking"
               onClick={() => setOpen(false)}
-              className="clay-btn text-center"
+              className="clay-btn text-center text-xs sm:text-sm !py-2.5"
             >
-              BOOK A SESSION
+              RESERVE A SESSION
             </Link>
 
-            <div className="pt-2 flex flex-col gap-2 text-center text-xs text-muted">
+            <div className="pt-1 flex items-center justify-center text-center text-[11px] text-muted">
               <a
                 href="https://instagram.com/noor_tattooz"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gold flex items-center justify-center gap-1.5"
+                className="text-gold flex items-center justify-center gap-1.5 hover:underline"
               >
-                <Instagram size={14} /> Follow on Instagram @noor_tattooz
+                <Instagram size={13} /> Follow on Instagram @noor_tattooz
               </a>
             </div>
           </div>
@@ -309,7 +313,7 @@ function Layout() {
               </div>
             </div>
             <p className="text-sm text-muted leading-relaxed mb-4">
-              A private luxury tattoo sanctuary in Bandra West, Mumbai. Dedicated to precision single-needle art, dark realism, and custom masterpieces crafted for longevity.
+              A premier custom tattoo atelier on Una Amb Road near Sabji Mandi, Prem Nagar, Una, Himachal Pradesh. Dedicated to bespoke artwork, fine-line elegance, dark realism, and clinical hospital-grade sterility.
             </p>
             <a
               href="https://instagram.com/noor_tattooz"
@@ -328,9 +332,9 @@ function Layout() {
             <ul className="space-y-2 text-sm text-muted">
               <li><Link to="/" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Home</Link></li>
               <li><Link to="/about" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> About Studio</Link></li>
-              <li><Link to="/artists" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Resident Artists</Link></li>
-              <li><Link to="/styles" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Tattoo Styles</Link></li>
               <li><Link to="/gallery" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Curated Portfolio</Link></li>
+              <li><Link to="/styles" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Tattoo Styles</Link></li>
+              <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Pricing & Services</Link></li>
               <li><Link to="/booking" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Book a Session</Link></li>
               <li><Link to="/contact" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Contact Atelier</Link></li>
             </ul>
@@ -418,8 +422,8 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="booking" element={<Booking />} />
           <Route path="about" element={<About />} />
-          <Route path="artists" element={<Artists />} />
-          <Route path="artists/:slug" element={<ArtistPage />} />
+          <Route path="artists" element={<Navigate to="/about" replace />} />
+          <Route path="artists/:slug" element={<Navigate to="/about" replace />} />
           <Route path="styles" element={<Styles />} />
           <Route path="styles/:style" element={<StylePage />} />
           <Route path="gallery" element={<Gallery />} />

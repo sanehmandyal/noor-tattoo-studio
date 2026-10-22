@@ -13,7 +13,6 @@ const schema = z.object({
   phone: z.string().min(7, 'Please enter a valid phone number (min 7 digits)'),
   date: z.string().min(1, 'Please select your preferred date'),
   time: z.string().min(1, 'Please choose a preferred time of day'),
-  artist: z.string().optional(),
   style: z.string().min(1, 'Please select a tattoo style'),
   placement: z.string().min(2, 'Please specify desired body placement (e.g. inner forearm, collarbone)'),
   size: z.string().min(1, 'Please select approximate size'),
@@ -33,17 +32,10 @@ export const Field = ({ label, error, hint, children }) => (
 );
 
 export default function Booking() {
-  const [searchParams] = useSearchParams();
-  const preselectedArtist = searchParams.get('artist') || '';
-
-  const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      artist: preselectedArtist
-    }
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+    resolver: zodResolver(schema)
   });
 
-  const [artists, setArtists] = useState([]);
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -52,14 +44,7 @@ export default function Booking() {
 
   useEffect(() => {
     api.get('/settings').then(r => setS(r.data)).catch(() => {});
-    api.get('/artists?limit=50').then(r => setArtists(r.data.items || [])).catch(() => {});
   }, []);
-
-  useEffect(() => {
-    if (preselectedArtist) {
-      setValue('artist', preselectedArtist);
-    }
-  }, [preselectedArtist, setValue]);
 
   const handleFileChange = e => {
     const selected = e.target.files[0];
@@ -154,7 +139,7 @@ export default function Booking() {
         </span>
       </div>
 
-      <form onSubmit={handleSubmit(submit)} noValidate className="glass-card p-6 sm:p-10 grid sm:grid-cols-2 gap-5 border border-gold/25">
+      <form onSubmit={handleSubmit(submit)} noValidate className="glass-card p-4 sm:p-8 md:p-10 grid sm:grid-cols-2 gap-4 sm:gap-5 border border-gold/25">
         <Field label="Full Name" error={errors.name}>
           <input className="field" placeholder="e.g. Ayesha Kapur" {...register('name')} autoComplete="name" />
         </Field>
@@ -165,15 +150,6 @@ export default function Booking() {
 
         <Field label="Phone / WhatsApp" error={errors.phone} hint="Digits with country code">
           <input type="tel" className="field" placeholder="e.g. +91 98200 12345" {...register('phone')} autoComplete="tel" />
-        </Field>
-
-        <Field label="Preferred Resident Artist" hint="Optional">
-          <select className="field" {...register('artist')}>
-            <option value="">No preference (Studio matches best artist)</option>
-            {artists.map(a => (
-              <option key={a._id} value={a._id}>{a.name} ({a.experience} yrs exp)</option>
-            ))}
-          </select>
         </Field>
 
         <Field label="Preferred Date" error={errors.date}>
