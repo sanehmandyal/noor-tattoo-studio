@@ -1,6 +1,7 @@
 import Manager, { Settings } from './AdminManager.jsx';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useCallback } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { api, errMsg } from '../api.js';
 
 const STATUS = {
@@ -10,6 +11,7 @@ const STATUS = {
 
 function Login({ onLogin }) {
   const [f, setF] = useState({ email: '', password: '' }), [err, setErr] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const go = async e => {
     e.preventDefault();
     setErr('');
@@ -37,9 +39,29 @@ function Login({ onLogin }) {
         <label className="grid gap-1 text-xs text-muted font-medium">Email Address
           <input type="email" required className="field" value={f.email} onChange={e => setF({ ...f, email: e.target.value })} />
         </label>
-        <label className="grid gap-1 text-xs text-muted font-medium">Password
-          <input type="password" required className="field" value={f.password} onChange={e => setF({ ...f, password: e.target.value })} />
-        </label>
+        <div className="grid gap-1 text-xs text-muted font-medium">
+          <label htmlFor="admin-password">Password</label>
+          <div className="relative">
+            <input
+              id="admin-password"
+              type={showPassword ? 'text' : 'password'}
+              required
+              className="field w-full pr-10"
+              value={f.password}
+              onChange={e => setF({ ...f, password: e.target.value })}
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(v => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-gold transition p-1 focus:outline-none"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              title={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+        </div>
         {err && <p role="alert" className="text-[var(--error)] text-xs">{err}</p>}
         <button className="clay-btn w-full mt-2">SIGN IN TO STUDIO PANEL</button>
         <div className="flex items-center justify-between text-xs pt-1">
@@ -192,6 +214,7 @@ function Forgot() {
 
 function Reset({ token }) {
   const [p, setP] = useState(''), [msg, setMsg] = useState('');
+  const [showP, setShowP] = useState(false);
   const go = async e => {
     e.preventDefault();
     try {
@@ -203,7 +226,28 @@ function Reset({ token }) {
   return (
     <Centered title="Set New Password">
       <form onSubmit={go} className="grid gap-4">
-        <input type="password" required minLength={12} autoComplete="new-password" className="field" placeholder="New password (12+ characters)" aria-label="New password" value={p} onChange={e => setP(e.target.value)} />
+        <div className="relative">
+          <input
+            type={showP ? 'text' : 'password'}
+            required
+            minLength={12}
+            autoComplete="new-password"
+            className="field w-full pr-10"
+            placeholder="New password (12+ characters)"
+            aria-label="New password"
+            value={p}
+            onChange={e => setP(e.target.value)}
+          />
+          <button
+            type="button"
+            onClick={() => setShowP(v => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-gold transition p-1 focus:outline-none"
+            aria-label={showP ? 'Hide password' : 'Show password'}
+            title={showP ? 'Hide password' : 'Show password'}
+          >
+            {showP ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
         <button className="clay-btn">SAVE NEW PASSWORD</button>
       </form>
       {msg && <p role="status" className="text-xs text-emerald">{msg}</p>}
