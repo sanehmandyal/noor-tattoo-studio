@@ -74,11 +74,22 @@ if (!process.env.JWT_SECRET || !process.env.MONGODB_URI) {
   process.exit(1);
 }
 
-// Connect to Database, auto-seed defaults if brand new, and start listening
-await connectDB();
-await autoSeedIfEmpty();
-
+// Start HTTP server immediately so cloud platforms (Render, Railway) pass port binding health-checks instantly
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`API server running on port ${PORT}`));
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`API server running on port ${PORT}`);
+});
+
+// Connect to Database and safely auto-seed initial data in background
+(async () => {
+  try {
+    await connectDB();
+    console.log('MongoDB connected successfully');
+    await autoSeedIfEmpty();
+    console.log('Database initialization / auto-seed complete');
+  } catch (err) {
+    console.error('Database connection or auto-seed initialization warning:', err.message);
+  }
+})();
 
 export default app;

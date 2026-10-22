@@ -14,14 +14,24 @@ import uploadRoutes from './uploadRoutes.js';
 import statsRoutes from './statsRoutes.js';
 
 import bcrypt from 'bcryptjs';
+import mongoose from 'mongoose';
 import * as M from '../models/index.js';
 import { autoSeedIfEmpty, ensureSuperAdmin } from '../config/bootstrap.js';
 
 const router = Router();
 
-// System Health & Diagnostics
+// System Health & Diagnostics (Non-blocking, reports DB status)
 router.get('/health', async (req, res) => {
   try {
+    const isConnected = mongoose.connection.readyState === 1;
+    if (!isConnected) {
+      return res.status(200).json({
+        status: 'warning',
+        dbReadyState: mongoose.connection.readyState,
+        message: 'Database is still establishing connection...',
+        timestamp: new Date().toISOString()
+      });
+    }
     const users = await M.User.countDocuments();
     const settings = await M.Settings.countDocuments();
     const artists = await M.Artist.countDocuments();
