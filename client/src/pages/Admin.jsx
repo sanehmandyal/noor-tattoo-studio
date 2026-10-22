@@ -16,7 +16,10 @@ function Login({ onLogin }) {
     e.preventDefault();
     setErr('');
     try {
-      const res = await api.post('/auth/login', f);
+      const res = await api.post('/auth/login', {
+        email: f.email.trim(),
+        password: f.password
+      });
       if (res.data.token) {
         localStorage.setItem('noor_auth_token', res.data.token);
       }

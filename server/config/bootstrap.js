@@ -1,8 +1,42 @@
 import bcrypt from 'bcryptjs';
 import * as M from '../models/index.js';
 
+export const ensureSuperAdmin = async () => {
+  try {
+    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@noortattoo.com').toLowerCase().trim();
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@NoorTattoo2026!';
+    let admin = await M.User.findOne({ email: adminEmail });
+    if (!admin) {
+      admin = await M.User.findOne({ role: 'super_admin' });
+    }
+
+    if (!admin) {
+      await M.User.create({
+        name: 'Noor (Founder)',
+        email: adminEmail,
+        password: await bcrypt.hash(adminPassword, 12),
+        role: 'super_admin',
+        status: 'active'
+      });
+      console.log(`✓ Created Super Admin user: ${adminEmail}`);
+    } else {
+      admin.email = adminEmail;
+      admin.status = 'active';
+      admin.role = 'super_admin';
+      admin.password = await bcrypt.hash(adminPassword, 12);
+      await admin.save();
+      console.log(`✓ Synchronized Super Admin credentials for: ${adminEmail}`);
+    }
+  } catch (e) {
+    console.error('Super admin setup error:', e);
+  }
+};
+
 export const autoSeedIfEmpty = async () => {
   try {
+    // Always guarantee super admin exists and credentials are valid
+    await ensureSuperAdmin();
+
     const settingsCount = await M.Settings.countDocuments({ key: 'main' });
     const artistsCount = await M.Artist.countDocuments();
 
