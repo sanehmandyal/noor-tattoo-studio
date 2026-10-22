@@ -87,8 +87,9 @@ export const autoSeedIfEmpty = async () => {
 
     // 3. Resident Artists
     let createdArtists = await M.Artist.find();
-    if (createdArtists.length === 0) {
-      createdArtists = await M.Artist.create([
+    if (createdArtists.length < 4) {
+      await M.Artist.deleteMany({ name: 'Demo Artist' });
+      const masterArtists = [
         {
           name: 'Noor',
           bio: 'Founder and Lead Tattoo Master of Noor Tattooz Studio Una with over 12 years behind the machine. Known throughout Himachal Pradesh and North India for surgical fine line precision, high-contrast black & grey realism, spiritual and religious iconography, custom sleeves, and flawless cover-ups. Every piece is drafted with deep respect for anatomical flow and lasting permanence.',
@@ -145,10 +146,17 @@ export const autoSeedIfEmpty = async () => {
           },
           status: 'available'
         }
-      ]);
+      ];
+      for (const a of masterArtists) {
+        await M.Artist.findOneAndUpdate({ name: a.name }, a, { upsert: true, new: true });
+      }
+      createdArtists = await M.Artist.find();
     }
 
-    const [noor, aanya, vikram, zara] = createdArtists;
+    const noor = createdArtists.find(a => a?.name?.includes('Noor')) || createdArtists[0];
+    const aanya = createdArtists.find(a => a?.name?.includes('Aanya')) || createdArtists[1] || noor;
+    const vikram = createdArtists.find(a => a?.name?.includes('Vikram')) || createdArtists[2] || noor;
+    const zara = createdArtists.find(a => a?.name?.includes('Zara')) || createdArtists[3] || noor;
 
     // 4. Studio Services
     if ((await M.Service.countDocuments()) === 0) {
