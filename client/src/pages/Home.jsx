@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { api, img, waLink } from '../api.js';
 import { SEO } from '../App.jsx';
+import { isOwnerWork } from '../utils/ownerWorks.js';
 
 export default function Home() {
   const [featuredGallery, setFeaturedGallery] = useState([]);
@@ -23,20 +24,8 @@ export default function Home() {
     // Fetch featured and owner artworks
     api.get('/gallery?limit=50').then(r => {
       const items = r.data.items || [];
-      const noorPieces = items.filter(i => {
-        const aName = i.artist?.name || '';
-        const aId = typeof i.artist === 'object' ? i.artist?._id : i.artist;
-        const tags = i.tags || [];
-        const cat = i.category || '';
-        return (
-          aId === '6ad9c1b90d8f98908ab0b30f' ||
-          aName.toLowerCase().includes('noor') ||
-          tags.some(t => t.toLowerCase().includes('noor')) ||
-          cat.toLowerCase().includes('founder')
-        );
-      });
-
-      setOwnerArtworks(noorPieces.length > 0 ? noorPieces : items.slice(0, 6));
+      const noorPieces = items.filter(isOwnerWork);
+      setOwnerArtworks(noorPieces);
 
       const featured = items.filter(i => i.featured);
       setFeaturedGallery(featured.length > 0 ? featured.slice(0, 6) : items.slice(0, 6));
@@ -252,104 +241,126 @@ export default function Home() {
       </section>
 
       {/* ========================================================= */}
-      {/* FOUNDER NOOR'S MASTER ARTWORKS SHOWCASE */}
+      {/* SEPARATE SECTION: STUDIO OWNER NOOR'S EXCLUSIVE ARTWORKS */}
       {/* ========================================================= */}
       <section className="py-20 relative overflow-hidden bg-gradient-to-b from-[#020b07] via-[#04160e] to-[#020b07] border-y border-[#17382a]">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gold/5 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gold/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/40 text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 text-gold border border-gold/40 text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
                 <Sparkles size={13} className="text-gold" />
-                <span>Founder & Master Artist Showcase</span>
+                <span>Dedicated Section · Studio Owner's Artworks</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold font-display text-cream tracking-tight">
-                ARTWORKS BY FOUNDER NOOR
+                HANDCRAFTED BY OWNER NOOR
               </h2>
               <p className="text-muted text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-                Direct from the founder's machine. Over 12 years behind the needle in Una, crafting bespoke dark realism, sacred geometry, and transformative cover-up tattoos.
+                Tattoos inked personally by studio founder Noor in Una. Every photo in this separate collection is uploaded directly from the studio atelier.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <Link
-                to="/gallery?artist=noor"
+                to="/owner-works"
                 className="clay-btn text-xs !py-2.5 !px-5 inline-flex items-center gap-2 shadow-xl border border-gold/50"
               >
-                <span>VIEW NOOR'S FULL PORTFOLIO</span>
+                <span>OPEN OWNER'S GALLERY</span>
                 <ArrowRight size={14} />
               </Link>
             </div>
           </div>
 
-          {/* Grid of Noor's Original Works */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ownerArtworks.slice(0, 6).map(piece => {
-              const whatsappMsg = `Hi Noor, I saw your artwork "${piece.title}" on the studio website and would love to consult on a custom session with you.`;
-              return (
-                <article
-                  key={piece._id}
-                  className="glass-card p-4 border border-gold/30 hover:border-gold/60 transition-all flex flex-col justify-between group overflow-hidden shadow-xl"
-                >
-                  <div>
-                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#061810] mb-4">
-                      <img
-                        src={img(piece.image)}
-                        alt={piece.imageAlt || piece.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
-                        <span className="bg-[#030e08]/90 backdrop-blur-md px-2.5 py-0.5 rounded text-[10px] font-bold text-gold border border-gold/40">
-                          {piece.style || 'Custom Art'}
-                        </span>
-                        {piece.placement && (
-                          <span className="bg-[#04120b]/85 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-medium text-silver border border-[#143526]">
-                            {piece.placement}
+          {/* Grid of Noor's Original Works (Only Admin-Added Images!) */}
+          {ownerArtworks.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {ownerArtworks.slice(0, 6).map(piece => {
+                const whatsappMsg = `Hi Noor, I saw your artwork "${piece.title}" on the studio website and would love to consult on a custom session with you.`;
+                return (
+                  <article
+                    key={piece._id}
+                    className="glass-card p-4 border border-gold/30 hover:border-gold/60 transition-all flex flex-col justify-between group overflow-hidden shadow-xl"
+                  >
+                    <div>
+                      <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#061810] mb-4">
+                        <img
+                          src={img(piece.image)}
+                          alt={piece.imageAlt || piece.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
+                          <span className="bg-[#030e08]/90 backdrop-blur-md px-2.5 py-0.5 rounded text-[10px] font-bold text-gold border border-gold/40">
+                            {piece.style || 'Custom Art'}
                           </span>
-                        )}
+                          {piece.placement && (
+                            <span className="bg-[#04120b]/85 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-medium text-silver border border-[#143526]">
+                              {piece.placement}
+                            </span>
+                          )}
+                        </div>
+                        <div className="absolute bottom-2.5 right-2.5 bg-gold/90 text-[#03110b] px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 shadow">
+                          <Sparkles size={10} />
+                          <span>By Noor</span>
+                        </div>
                       </div>
-                      <div className="absolute bottom-2.5 right-2.5 bg-gold/90 text-[#03110b] px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 shadow">
-                        <Sparkles size={10} />
-                        <span>By Noor</span>
-                      </div>
+
+                      <h3 className="text-base sm:text-lg font-bold text-cream group-hover:text-gold transition line-clamp-1">
+                        {piece.title}
+                      </h3>
+                      <p className="text-xs text-muted mt-1 flex items-center gap-1.5">
+                        <Feather size={12} className="text-gold" />
+                        <span>Artisan: <strong className="text-silver">Noor (Studio Owner)</strong></span>
+                      </p>
+                      {piece.description && (
+                        <p className="text-xs text-muted/80 mt-2 line-clamp-2 leading-relaxed">
+                          {piece.description}
+                        </p>
+                      )}
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-bold text-cream group-hover:text-gold transition line-clamp-1">
-                      {piece.title}
-                    </h3>
-                    <p className="text-xs text-muted mt-1 flex items-center gap-1.5">
-                      <Feather size={12} className="text-gold" />
-                      <span>Artisan: <strong className="text-silver">Noor (Lead Master Artist)</strong></span>
-                    </p>
-                    {piece.description && (
-                      <p className="text-xs text-muted/80 mt-2 line-clamp-2 leading-relaxed">
-                        {piece.description}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-[#143526] flex items-center justify-between text-xs">
-                    <a
-                      href={waLink(settings.whatsapp || '8219811181', whatsappMsg)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold"
-                    >
-                      <span>Consult with Noor</span>
-                      <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                    </a>
-                    <Link
-                      to={`/gallery/${piece.slug || piece._id}`}
-                      className="text-muted hover:text-cream text-[11px] font-medium transition"
-                    >
-                      Details ›
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                    <div className="mt-4 pt-3 border-t border-[#143526] flex items-center justify-between text-xs">
+                      <a
+                        href={waLink(settings.whatsapp || '8219811181', whatsappMsg)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold"
+                      >
+                        <span>Consult with Noor</span>
+                        <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+                      <Link
+                        to={`/gallery/${piece.slug || piece._id}`}
+                        className="text-muted hover:text-cream text-[11px] font-medium transition"
+                      >
+                        Details ›
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="glass-card p-10 text-center border border-gold/20 max-w-xl mx-auto space-y-4">
+              <div className="h-14 w-14 rounded-2xl bg-gold/15 text-gold border border-gold/30 grid place-items-center mx-auto">
+                <Feather size={24} />
+              </div>
+              <h3 className="text-lg font-bold text-cream font-display">
+                Studio Owner's Artworks Section Ready
+              </h3>
+              <p className="text-xs text-muted leading-relaxed">
+                Photos uploaded by the admin via the Admin Panel will appear here immediately in this dedicated section.
+              </p>
+              <div className="flex justify-center gap-3 pt-2">
+                <Link to="/owner-works" className="clay-btn text-xs !py-2 !px-4">
+                  VISIT OWNER'S PAGE
+                </Link>
+                <Link to="/booking" className="clay-btn ghost text-xs !py-2 !px-4">
+                  BOOK SESSION
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

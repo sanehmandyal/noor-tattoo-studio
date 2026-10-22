@@ -11,6 +11,7 @@ const Home = lazy(() => import('./pages/Home.jsx'));
 const Booking = lazy(() => import('./pages/Booking.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const Admin = lazy(() => import('./pages/Admin.jsx'));
+const OwnerWorksPage = lazy(() => import('./pages/OwnerWorksPage.jsx'));
 const P = n => lazy(() => import('./pages/Pages.jsx').then(m => ({ default: m[n] })));
 const [
   Artists, ArtistPage, Gallery, GalleryItem, Pricing, Blog, BlogPost, FAQ,
@@ -33,6 +34,7 @@ export const SEO = ({ title, description }) => (
 
 const navLinks = [
   ['/', 'Home'],
+  ['/owner-works', "Owner's Work"],
   ['/about', 'About'],
   ['/gallery', 'Portfolio'],
   ['/styles', 'Tattoo Styles'],
@@ -343,7 +345,7 @@ function Layout() {
             <ul className="space-y-2 text-sm text-muted">
               <li><Link to="/" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Home</Link></li>
               <li><Link to="/about" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> About Studio</Link></li>
-              <li><Link to="/gallery?artist=noor" className="hover:text-cream transition flex items-center gap-1.5 font-semibold text-gold/90"><span className="text-gold">✦</span> Artworks by Founder Noor</Link></li>
+              <li><Link to="/owner-works" className="hover:text-cream transition flex items-center gap-1.5 font-semibold text-gold"><span className="text-gold">✦</span> Owner's Tattoo Work</Link></li>
               <li><Link to="/gallery" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Curated Portfolio</Link></li>
               <li><Link to="/styles" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Tattoo Styles</Link></li>
               <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Custom Quotes & Estimates</Link></li>
@@ -432,6 +434,8 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="owner-works" element={<OwnerWorksPage />} />
+          <Route path="owner-art" element={<OwnerWorksPage />} />
           <Route path="booking" element={<Booking />} />
           <Route path="about" element={<About />} />
           <Route path="artists" element={<Navigate to="/about" replace />} />

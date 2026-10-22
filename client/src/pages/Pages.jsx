@@ -8,20 +8,7 @@ import {
 } from 'lucide-react';
 import { api, img, waLink } from '../api.js';
 import { SEO } from '../App.jsx';
-
-const isByNoor = piece => {
-  if (!piece) return false;
-  const aName = piece.artist?.name || '';
-  const aId = typeof piece.artist === 'object' ? piece.artist?._id : piece.artist;
-  const tags = piece.tags || [];
-  const cat = piece.category || '';
-  return (
-    aId === '6ad9c1b90d8f98908ab0b30f' ||
-    aName.toLowerCase().includes('noor') ||
-    tags.some(t => t.toLowerCase().includes('noor')) ||
-    cat.toLowerCase().includes('founder')
-  );
-};
+import { isOwnerWork as isByNoor } from '../utils/ownerWorks.js';
 
 const STYLES = [
   'All', 'Realism', 'Fine Line', 'Black & Grey', 'Japanese', 'Minimalist',
@@ -340,6 +327,27 @@ export function Gallery() {
       sub="Living Masterpieces"
       desc="Explore curated tattoos created by our resident masters. Filter by art discipline or search by subject matter to find inspiration for your next permanent piece."
     >
+      {/* Featured Callout to Dedicated Owner's Works Section */}
+      <div className="mb-10 p-5 rounded-2xl glass-card border border-gold/30 bg-gradient-to-r from-[#04160e] via-[#09281a] to-[#04160e] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+        <div className="flex items-center gap-3.5">
+          <div className="h-12 w-12 rounded-xl bg-gold/20 text-gold border border-gold/40 grid place-items-center shrink-0">
+            <Sparkles size={22} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-gold uppercase tracking-wider">Separate Owner Showcase</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald/20 text-emerald font-semibold uppercase">Admin Uploads</span>
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-cream">Looking for tattoos inked personally by Owner Noor?</h3>
+            <p className="text-xs text-muted">Explore the dedicated collection of artworks handcrafted by studio founder Noor.</p>
+          </div>
+        </div>
+        <Link to="/owner-works" className="clay-btn text-xs !py-2.5 !px-5 shrink-0 inline-flex items-center gap-1.5 shadow-lg border border-gold/40">
+          <span>VISIT OWNER'S WORK SECTION</span>
+          <ArrowRight size={13} />
+        </Link>
+      </div>
+
       {/* Search & Style Filters */}
       <div className="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Style Pills + Noor's Masterpieces Filter */}

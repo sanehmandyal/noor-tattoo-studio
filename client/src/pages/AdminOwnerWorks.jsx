@@ -18,6 +18,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { api, errMsg, img } from '../api.js';
+import { isOwnerWork } from '../utils/ownerWorks.js';
 
 const QUICK_STYLES = [
   'Realism',
@@ -87,19 +88,7 @@ export default function AdminOwnerWorks() {
       const allItems = galleryRes.data.items || [];
 
       // Filter artworks created by Noor
-      const noorWorks = allItems.filter(item => {
-        const itemArtistId = typeof item.artist === 'object' ? item.artist?._id : item.artist;
-        const itemArtistName = item.artist?.name || '';
-        const tags = item.tags || [];
-        const cat = item.category || '';
-
-        return (
-          itemArtistId === resolvedId ||
-          itemArtistName.toLowerCase().includes('noor') ||
-          tags.some(t => t.toLowerCase().includes('noor')) ||
-          cat.toLowerCase().includes('founder')
-        );
-      });
+      const noorWorks = allItems.filter(isOwnerWork);
 
       setWorks(noorWorks);
     } catch (e) {
@@ -205,11 +194,11 @@ export default function AdminOwnerWorks() {
         title: finalTitle,
         image: imageUrl,
         imageAlt: `${finalTitle} by Founder Noor at Noor Tattooz Studio Una`,
-        category: "Founder's Collection",
+        category: "Owner Work",
         style: selectedStyle,
         placement: selectedPlacement,
         artist: noorArtistId,
-        tags: ['NoorOriginal', 'Masterpiece', 'FounderCollection', selectedStyle.toLowerCase()],
+        tags: ['OwnerWork', 'AdminUpload', 'NoorOriginal', 'FounderCollection', selectedStyle.toLowerCase()],
         featured: featured,
         description:
           customDescription.trim() ||
