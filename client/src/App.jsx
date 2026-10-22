@@ -37,7 +37,7 @@ const navLinks = [
   ['/gallery', 'Portfolio'],
   ['/styles', 'Tattoo Styles'],
   ['/process', 'Process & Safety'],
-  ['/pricing', 'Get a Quote'],
+  ['/pricing', 'Services'],
   ['/contact', 'Contact']
 ];
 
@@ -148,7 +148,7 @@ function Layout() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-2.5 xl:gap-4">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-5">
             {navLinks.map(([to, label]) => (
               <NavLink
                 key={to}
@@ -162,18 +162,6 @@ function Layout() {
                 {label}
               </NavLink>
             ))}
-
-            {/* Direct WhatsApp Quote Button */}
-            <a
-              href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get a custom price quote for a tattoo idea.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider bg-emerald/15 hover:bg-emerald/25 text-emerald border border-emerald/40 transition shadow-sm"
-              title="Get a free custom quote on WhatsApp"
-            >
-              <MessageCircle size={13} className="text-emerald" />
-              <span>GET QUOTE</span>
-            </a>
 
             {/* Prominent Call Button in Desktop Navbar */}
             <a
@@ -193,17 +181,6 @@ function Layout() {
 
           {/* Mobile Right Controls: Call Button + Menu Toggle */}
           <div className="flex items-center gap-2 sm:gap-2.5 lg:hidden">
-            <a
-              href={waLink(s.whatsapp || '8219811181', 'Hi Noor Tattooz Studio, I would like to get a quote for a tattoo idea.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald/20 text-emerald border border-emerald/40 shrink-0"
-              aria-label="Get Quote on WhatsApp"
-            >
-              <MessageCircle size={11} />
-              <span>QUOTE</span>
-            </a>
-
             <a
               href={`tel:${(s.phone || '8219811181').replace(/\s+/g, '')}`}
               className="glass-call-btn !py-1.5 !px-2.5 !text-xs flex items-center gap-1 shrink-0"
