@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { api, img, waLink } from '../api.js';
 import { SEO } from '../App.jsx';
-import { isOwnerWork as isByNoor } from '../utils/ownerWorks.js';
 
 const STYLES = [
   'All', 'Realism', 'Fine Line', 'Black & Grey', 'Japanese', 'Minimalist',
@@ -134,8 +133,7 @@ export function ArtistPage() {
         const items = r.data.items || [];
         if (!items.length && a.name?.toLowerCase().includes('noor')) {
           api.get('/gallery?limit=50').then(res => {
-            const all = res.data.items || [];
-            setGallery(all.filter(isByNoor));
+            setGallery(res.data.items || []);
           }).catch(() => {});
         } else {
           setGallery(items);
@@ -267,9 +265,6 @@ export function ArtistPage() {
 
 // 3. GALLERY (PORTFOLIO)
 export function Gallery() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const urlArtist = searchParams.get('artist');
-  const [onlyNoor, setOnlyNoor] = useState(urlArtist === 'noor');
   const [style, setStyle] = useState('All');
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
@@ -284,27 +279,16 @@ export function Gallery() {
     api.get('/settings').then(r => setSettings(r.data)).catch(() => {});
   }, []);
 
-  useEffect(() => {
-    if (urlArtist === 'noor') {
-      setOnlyNoor(true);
-    }
-  }, [urlArtist]);
-
-  useEffect(() => { setPage(1); }, [style, q, onlyNoor]);
+  useEffect(() => { setPage(1); }, [style, q]);
 
   useEffect(() => {
     const t = setTimeout(() => {
       setLoading(true);
-      const limit = onlyNoor ? 50 : 12;
-      const params = { q, page, limit };
+      const params = { q, page, limit: 12 };
       if (style !== 'All') params.style = style;
       api.get('/gallery', { params })
         .then(r => {
-          let fetched = r.data.items || [];
-          if (onlyNoor) {
-            fetched = fetched.filter(isByNoor);
-          }
-          setItems(prev => page === 1 ? fetched : [...prev, ...fetched]);
+          setItems(prev => page === 1 ? r.data.items : [...prev, ...r.data.items]);
           setPages(r.data.pages);
           setErr(false);
         })
@@ -312,7 +296,7 @@ export function Gallery() {
         .finally(() => setLoading(false));
     }, 250);
     return () => clearTimeout(t);
-  }, [style, q, page, onlyNoor]);
+  }, [style, q, page]);
 
   useEffect(() => {
     const esc = e => e.key === 'Escape' && setActiveModal(null);
@@ -327,63 +311,16 @@ export function Gallery() {
       sub="Living Masterpieces"
       desc="Explore curated tattoos created by our resident masters. Filter by art discipline or search by subject matter to find inspiration for your next permanent piece."
     >
-      {/* Featured Callout to Dedicated Owner's Works Section */}
-      <div className="mb-10 p-5 rounded-2xl glass-card border border-gold/30 bg-gradient-to-r from-[#04160e] via-[#09281a] to-[#04160e] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
-        <div className="flex items-center gap-3.5">
-          <div className="h-12 w-12 rounded-xl bg-gold/20 text-gold border border-gold/40 grid place-items-center shrink-0">
-            <Sparkles size={22} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-gold uppercase tracking-wider">Separate Owner Showcase</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald/20 text-emerald font-semibold uppercase">Admin Uploads</span>
-            </div>
-            <h3 className="text-base sm:text-lg font-bold text-cream">Looking for tattoos inked personally by Owner Noor?</h3>
-            <p className="text-xs text-muted">Explore the dedicated collection of artworks handcrafted by studio founder Noor.</p>
-          </div>
-        </div>
-        <Link to="/owner-works" className="clay-btn text-xs !py-2.5 !px-5 shrink-0 inline-flex items-center gap-1.5 shadow-lg border border-gold/40">
-          <span>VISIT OWNER'S WORK SECTION</span>
-          <ArrowRight size={13} />
-        </Link>
-      </div>
-
       {/* Search & Style Filters */}
       <div className="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        {/* Style Pills + Noor's Masterpieces Filter */}
+        {/* Style Pills */}
         <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
-          <button
-            onClick={() => {
-              const next = !onlyNoor;
-              setOnlyNoor(next);
-              if (next) {
-                setStyle('All');
-                setSearchParams({ artist: 'noor' });
-              } else {
-                setSearchParams({});
-              }
-            }}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider transition flex items-center gap-1.5 shadow ${
-              onlyNoor
-                ? 'bg-gradient-to-r from-gold via-[#ffe28a] to-gold text-[#04120b] border border-gold scale-105'
-                : 'bg-[#0a271c] text-gold hover:text-cream border border-gold/40'
-            }`}
-          >
-            <Sparkles size={13} className={onlyNoor ? 'text-[#04120b]' : 'text-gold'} />
-            <span>✦ NOOR'S ORIGINAL ARTWORKS</span>
-          </button>
-
           {STYLES.map(s => (
             <button
               key={s}
-              onClick={() => {
-                setStyle(s);
-                if (onlyNoor && s !== 'All') {
-                  // User selected a specific style while viewing Noor's works
-                }
-              }}
+              onClick={() => setStyle(s)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider transition ${
-                style === s && !onlyNoor
+                style === s
                   ? 'bg-gold text-[#111] shadow-md font-bold'
                   : 'bg-[#18181b] text-muted hover:text-cream border border-line'
               }`}
@@ -412,7 +349,7 @@ export function Gallery() {
       ) : !loading && !items.length ? (
         <div className="text-center py-20 clay p-8 max-w-lg mx-auto">
           <p className="text-muted">No tattoo pieces match your selected style or search term.</p>
-          <button onClick={() => { setStyle('All'); setOnlyNoor(false); setQ(''); setSearchParams({}); }} className="clay-btn ghost text-xs mt-4">RESET FILTERS</button>
+          <button onClick={() => { setStyle('All'); setQ(''); }} className="clay-btn ghost text-xs mt-4">RESET FILTERS</button>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -438,23 +375,12 @@ export function Gallery() {
                       {piece.placement}
                     </span>
                   )}
-                  {isByNoor(piece) && (
-                    <span className="bg-gold text-[#03110b] font-bold px-2 py-0.5 rounded text-[9px] uppercase tracking-wider flex items-center gap-1 shadow">
-                      <Sparkles size={10} />
-                      <span>By Founder Noor</span>
-                    </span>
-                  )}
                 </div>
               </div>
               <div className="p-4">
                 <h3 className="text-base font-bold text-cream group-hover:text-gold transition">{piece.title}</h3>
-                <p className="text-xs text-muted mt-1 flex items-center justify-between">
-                  <span>Atelier: <strong className="text-silver">Noor Tattooz</strong></span>
-                  {isByNoor(piece) && (
-                    <span className="text-[10px] text-gold font-bold flex items-center gap-0.5">
-                      <Feather size={11} /> Founder Original
-                    </span>
-                  )}
+                <p className="text-xs text-muted mt-1">
+                  Studio: <span className="text-cream">Noor Tattooz Atelier</span>
                 </p>
                 <div className="mt-3 flex items-center justify-between text-xs text-gold">
                   <span>View Details & Specs</span>
@@ -503,16 +429,10 @@ export function Gallery() {
                       {activeModal.placement}
                     </span>
                   )}
-                  {isByNoor(activeModal) && (
-                    <span className="bg-gold text-[#03110b] font-bold px-2 py-0.5 rounded text-[9px] uppercase tracking-wider flex items-center gap-1 shadow">
-                      <Sparkles size={10} />
-                      <span>Founder Noor Original</span>
-                    </span>
-                  )}
                 </div>
                 <h2 className="text-2xl font-bold text-cream mt-0.5">{activeModal.title}</h2>
                 <p className="text-xs text-muted mt-1">
-                  Artist: <strong className="text-cream">{activeModal.artist?.name || (isByNoor(activeModal) ? 'Noor (Founder & Lead Master Artist)' : 'Resident Master')}</strong>
+                  Artist: <strong className="text-cream">{activeModal.artist?.name || 'Resident Master'}</strong>
                 </p>
               </div>
               <button
@@ -535,30 +455,6 @@ export function Gallery() {
             <p className="text-sm text-muted leading-relaxed mb-4 whitespace-pre-line">
               {activeModal.description}
             </p>
-
-            {isByNoor(activeModal) && (
-              <div className="mb-4 p-3.5 rounded-xl bg-gold/10 border border-gold/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] font-bold text-gold uppercase tracking-wider flex items-center gap-1">
-                    <Sparkles size={11} /> Masterpiece Handcrafted by Studio Founder
-                  </span>
-                  <p className="text-xs text-cream font-medium">
-                    This artwork was illustrated and tattooed personally by Noor at our Prem Nagar atelier in Una.
-                  </p>
-                </div>
-                <a
-                  href={waLink(
-                    settings.whatsapp || '8219811181',
-                    `Hi Noor, I saw your artwork "${activeModal.title}" and would like to consult on a custom tattoo session with you.`
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="clay-btn text-xs !py-1.5 !px-3 shrink-0"
-                >
-                  <span>WhatsApp Noor Directly</span>
-                </a>
-              </div>
-            )}
 
             <div className="flex flex-wrap gap-2 mb-6">
               {activeModal.tags?.map(t => (
@@ -1049,8 +945,8 @@ export const About = () => {
           </div>
           <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/30">
             <img
-              src="/tattoos/studio-interior.jpg"
-              alt="Noor Tattooz Interior Atmosphere"
+              src="/tattoos/noor-una/original-tattoo-1.jpg"
+              alt="Authentic Master Tattoo Art by Noor Tattooz"
               className="w-full h-auto rounded-xl object-cover"
             />
           </div>
@@ -1325,7 +1221,7 @@ Every shadow is built through individual micro-dots (stippling), creating a mesm
     name: 'Custom Concepts & Cover-Ups',
     tag: 'Custom Designs',
     badge: 'Transformative Art',
-    img: '/tattoos/tattoo-craft.jpg',
+    img: '/tattoos/noor-una/original-tattoo-3.jpg',
     lead: 'Transformative cover-ups, medical scar camouflaging, and bespoke multidisciplinary concepts engineered exclusively for your story.',
     description: `No two lives are alike, and no two tattoos at Noor Tattooz are duplicated. If you have an abstract idea that crosses multiple styles—or an unwanted old tattoo or surgical scar that needs reimagining—our master artists engineer bespoke compositions.
 

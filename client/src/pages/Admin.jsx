@@ -1,5 +1,4 @@
 import Manager, { Settings } from './AdminManager.jsx';
-import AdminOwnerWorks from './AdminOwnerWorks.jsx';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useCallback } from 'react';
 import {
@@ -32,8 +31,7 @@ import {
   ChevronRight,
   Database,
   Phone,
-  Mail,
-  Feather
+  Mail
 } from 'lucide-react';
 import { api, errMsg } from '../api.js';
 
@@ -65,18 +63,6 @@ const NAV_GROUPS = [
     items: [
       { id: 'bookings', label: 'Appointments', icon: CalendarCheck, desc: 'Tattoo session bookings' },
       { id: 'inquiries', label: 'Client Inquiries', icon: MessageSquare, desc: 'Messages & quote requests' }
-    ]
-  },
-  {
-    title: "Founder's Art Studio",
-    items: [
-      {
-        id: 'owner_works',
-        label: "Owner's Artworks",
-        icon: Feather,
-        desc: "Upload Noor's personal tattoo work (picture only)",
-        badge: 'Owner'
-      }
     ]
   },
   {
@@ -880,11 +866,11 @@ function Dashboard() {
                   </p>
                   <div className="flex flex-wrap items-center gap-3 pt-3">
                     <button
-                      onClick={() => setTab('owner_works')}
+                      onClick={() => setTab('gallery')}
                       className="clay-btn text-xs !py-2 !px-4 inline-flex items-center gap-2 border border-gold/40 shadow-lg"
                     >
-                      <Feather size={14} className="text-gold" />
-                      <span>Upload Owner's Tattoo</span>
+                      <Plus size={14} className="text-gold" />
+                      <span>Add Tattoo Work to Site</span>
                     </button>
                     <button
                       onClick={() => setTab('bookings')}
@@ -892,13 +878,6 @@ function Dashboard() {
                     >
                       <CalendarCheck size={14} />
                       <span>Review Bookings</span>
-                    </button>
-                    <button
-                      onClick={() => setTab('gallery')}
-                      className="clay-btn ghost text-xs !py-2 !px-4 inline-flex items-center gap-2"
-                    >
-                      <Plus size={14} />
-                      <span>Studio Gallery</span>
                     </button>
                     <button
                       onClick={() => setTab('settings')}
@@ -947,10 +926,10 @@ function Dashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
                     {
-                      label: "Owner's Artworks",
-                      desc: "Quick upload Noor's tattoo photos",
-                      tab: 'owner_works',
-                      icon: Feather
+                      label: 'Add & Manage Tattoos',
+                      desc: 'Upload tattoo photos directly to portfolio',
+                      tab: 'gallery',
+                      icon: ImageIcon
                     },
                     {
                       label: 'Appointments',
@@ -963,12 +942,6 @@ function Dashboard() {
                       desc: 'Answer client questions & quotes',
                       tab: 'inquiries',
                       icon: MessageSquare
-                    },
-                    {
-                      label: 'Portfolio Showcase',
-                      desc: 'Manage all resident artworks',
-                      tab: 'gallery',
-                      icon: ImageIcon
                     },
                     {
                       label: 'Reviews & Feedback',
@@ -997,9 +970,6 @@ function Dashboard() {
               </div>
             </div>
           )}
-
-          {/* Owner Tattoo Artworks (Picture-only Quick Uploader) */}
-          {tab === 'owner_works' && <AdminOwnerWorks />}
 
           {/* Bookings or Inquiries */}
           {(tab === 'bookings' || tab === 'inquiries') && (

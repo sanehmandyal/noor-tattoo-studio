@@ -25,17 +25,17 @@ export const RES = {
   gallery: {
     label: 'title',
     title: 'Portfolio Artworks',
-    desc: 'Manage published tattoo masterpieces displayed in the studio portfolio.',
+    desc: 'Upload and manage original tattoo artworks displayed across the studio website and portfolio.',
     fields: [
+      f('image', 'Tattoo Artwork Image (Upload Photo)', 'image', { req: 1 }),
       f('title', 'Tattoo Title / Concept', 'text', { req: 1 }),
-      f('category', 'Category (e.g. Realism, Fine Line, Custom Sleeve)'),
-      f('style', 'Style (e.g. Black & Grey, Geometric, Oriental)'),
-      f('placement', 'Body Placement (e.g. Forearm, Chest, Full Back)'),
-      f('image', 'Tattoo Artwork Image', 'image'),
-      f('imageAlt', 'Image Alt Description (for SEO)'),
-      f('tags', 'Tags (comma separated, e.g. realism, sleeve, dark)', 'csv'),
-      f('featured', 'Feature on Studio Homepage', 'bool'),
-      f('description', 'Artistic Vision & Background Story', 'textarea')
+      f('style', 'Style (e.g. Fine Line, Realism, Black & Grey, Japanese, Geometric)'),
+      f('category', 'Category (e.g. Custom Sleeve, Minimalist, Floral, Spiritual)'),
+      f('placement', 'Body Placement (e.g. Forearm, Shoulder, Ribcage, Back, Leg)'),
+      f('featured', 'Feature on Homepage Gallery Showcase', 'bool'),
+      f('imageAlt', 'Image Alt Description (for Google Search SEO)'),
+      f('tags', 'Tags (comma separated, e.g. realism, floral, single-needle)', 'csv'),
+      f('description', 'Artistic Vision & Tattoo Description', 'textarea')
     ]
   },
   services: {
