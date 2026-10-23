@@ -932,6 +932,12 @@ function Dashboard() {
                       icon: ImageIcon
                     },
                     {
+                      label: 'Publish Blog & Articles',
+                      desc: 'Create, edit & publish studio guides',
+                      tab: 'blog',
+                      icon: FileText
+                    },
+                    {
                       label: 'Appointments',
                       desc: 'Check upcoming tattoo sessions',
                       tab: 'bookings',

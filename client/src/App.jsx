@@ -36,8 +36,9 @@ const navLinks = [
   ['/about', 'About'],
   ['/gallery', 'Portfolio'],
   ['/styles', 'Tattoo Styles'],
-  ['/process', 'Process & Safety'],
   ['/pricing', 'Services'],
+  ['/blog', 'Blog'],
+  ['/process', 'Process & Safety'],
   ['/contact', 'Contact']
 ];
 

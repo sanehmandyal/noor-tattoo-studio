@@ -59,6 +59,10 @@ app.use('/api', apiLimiter);
 // Static uploads serving (local development storage)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Also serve tattoos static assets if requested through API host
+const tattoosStaticPath = path.join(__dirname, '../client/public/tattoos');
+app.use('/tattoos', express.static(tattoosStaticPath));
+
 // Main API Routes
 app.use('/api', routes);
 

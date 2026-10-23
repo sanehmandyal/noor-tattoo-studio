@@ -123,6 +123,14 @@ export default function Contact() {
             </a>
           </div>
 
+          <div className="rounded-xl overflow-hidden border border-gold/30 aspect-[16/9] bg-[#0c2217]">
+            <img
+              src="/tattoos/studio-interior.jpg"
+              alt="Noor Tattoo Studio Interior on Una Amb Road, Prem Nagar"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
           <div className="p-4 rounded-xl bg-[#141418] border border-[#232328] text-xs text-muted">
             <strong className="text-cream block mb-1 flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-emerald-400" /> Studio Protocol

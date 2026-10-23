@@ -56,9 +56,19 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-8 pb-20 md:py-24 border-b border-[#17382a]">
-        {/* Deep Emerald Ambient Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.15)_0%,_transparent_70%)] pointer-events-none -z-10" />
+      <section className="relative overflow-hidden pt-10 pb-20 md:py-28 border-b border-[#17382a]">
+        {/* Realistic Professional Tattoo Atelier Atmosphere Background */}
+        <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none">
+          <img
+            src="/hero-tattoo.jpg"
+            alt="Noor Tattoo Studio Professional Tattooing Atelier"
+            className="w-full h-full object-cover object-[center_35%] filter brightness-[0.22] contrast-[1.12] scale-105"
+          />
+          {/* Multi-directional Luxury Vignette Overlays for Crisp Typography */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#020b07] via-[#020b07]/92 to-[#020b07]/75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#020b07] via-transparent to-[#020b07]/85" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.18)_0%,_transparent_65%)]" />
+        </div>
         
         <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-12 gap-12 items-center">
           <motion.div

@@ -31,9 +31,14 @@ export const errMsg = e =>
 export const img = u => {
   if (!u) return '';
   if (u.startsWith('http://') || u.startsWith('https://') || u.startsWith('data:')) return u;
-  const envUrl = import.meta.env.VITE_API_URL || PROD_API_URL;
-  const origin = envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
-  return `${origin}${u.startsWith('/') ? '' : '/'}${u}`;
+  // If it's an uploaded asset from the backend storage (/uploads/...)
+  if (u.startsWith('/uploads/') || u.startsWith('uploads/')) {
+    const envUrl = import.meta.env.VITE_API_URL || PROD_API_URL;
+    const origin = envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+    return `${origin}${u.startsWith('/') ? '' : '/'}${u}`;
+  }
+  // Static frontend assets (/tattoos/..., /hero-tattoo.jpg, /logo.png, etc.)
+  return u;
 };
 
 export const waLink = (n, t = '') =>

@@ -623,6 +623,17 @@ export function Pricing() {
           {d?.items.map(s => (
             <article key={s._id} className="clay p-6 flex flex-col justify-between group">
               <div>
+                {s.image && (
+                  <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-4 bg-[#0a1f16] border border-[#17382a]">
+                    <img
+                      src={img(s.image)}
+                      alt={s.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <h2 className="text-xl font-bold text-cream group-hover:text-gold transition">{s.title}</h2>
                   <span className="text-xs uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-emerald/15 text-emerald border border-emerald/30 whitespace-nowrap">
@@ -720,49 +731,122 @@ export function Pricing() {
 // 6. BLOG LIST
 export function Blog() {
   const [d, err] = useFetch('/blog?limit=50');
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [q, setQ] = useState('');
+
+  const categories = ['All', 'Aftercare', 'Artistry', 'Culture', 'Style Guide', 'Studio Life'];
+
+  const allItems = d?.items || [];
+  const filteredPosts = allItems.filter(p => {
+    const matchesCat = activeCategory === 'All' || p.category === activeCategory;
+    const matchesQuery = !q.trim() ||
+      p.title?.toLowerCase().includes(q.toLowerCase()) ||
+      p.excerpt?.toLowerCase().includes(q.toLowerCase()) ||
+      p.author?.toLowerCase().includes(q.toLowerCase());
+    return matchesCat && matchesQuery;
+  });
 
   return (
     <Wrap
       title="Tattoo Studio Journal & Guides"
-      h="STUDIO JOURNAL"
-      sub="Education & Insights"
-      desc="Explore expert articles on tattoo aftercare, healing science, pain management, single-needle longevity, and the philosophy of permanent self-expression."
+      h="STUDIO JOURNAL & GUIDES"
+      sub="Education & Ink Insights"
+      desc="Explore authoritative articles written by our resident masters on tattoo healing science, sterile safety, single-needle precision, and studio culture."
     >
-      <State d={d} err={err}>
-        <Grid>
-          {d?.items.map(post => (
-            <article key={post._id} className="clay overflow-hidden group flex flex-col justify-between">
-              <div>
-                <div className="relative aspect-[16/9] bg-[#18181c] overflow-hidden">
-                  <img
-                    src={img(post.featuredImage)}
-                    alt={post.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <span className="absolute top-3 left-3 bg-[#0b0b0c]/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] text-gold uppercase font-medium">
-                    {post.category || 'Article'}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <h2 className="text-xl font-bold text-cream group-hover:text-gold transition leading-snug">
-                    <Link to={`/blog/${post.slug}`}>{post.title}</Link>
-                  </h2>
-                  <p className="text-xs text-muted mt-2 line-clamp-3 leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                </div>
-              </div>
-
-              <div className="px-6 pb-6 pt-3 border-t border-line flex items-center justify-between text-xs text-muted">
-                <span>By {post.author}</span>
-                <Link to={`/blog/${post.slug}`} className="text-gold hover:underline flex items-center gap-1 font-semibold">
-                  Read Guide <ChevronRight size={13} />
-                </Link>
-              </div>
-            </article>
+      {/* Category Pills & Live Search Bar */}
+      <div className="mb-10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
+          {categories.map(c => (
+            <button
+              key={c}
+              onClick={() => setActiveCategory(c)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition ${
+                activeCategory === c
+                  ? 'bg-gold text-[#111] shadow-md font-bold'
+                  : 'bg-[#18181b] text-muted hover:text-cream border border-line'
+              }`}
+            >
+              {c.toUpperCase()}
+            </button>
           ))}
-        </Grid>
+        </div>
+
+        <div className="w-full md:w-auto">
+          <input
+            type="search"
+            placeholder="Search articles, topics..."
+            value={q}
+            onChange={e => setQ(e.target.value)}
+            className="field w-full md:w-64 text-xs"
+            aria-label="Search articles"
+          />
+        </div>
+      </div>
+
+      <State d={d} err={err}>
+        {filteredPosts.length === 0 ? (
+          <div className="text-center py-20 clay p-8 max-w-lg mx-auto">
+            <p className="text-muted">No articles found matching your criteria.</p>
+            <button onClick={() => { setActiveCategory('All'); setQ(''); }} className="clay-btn ghost text-xs mt-4">
+              RESET FILTERS
+            </button>
+          </div>
+        ) : (
+          <Grid>
+            {filteredPosts.map(post => {
+              const readTime = Math.max(1, Math.ceil((post.content?.split(/\s+/).length || 200) / 200));
+              const displayDate = post.publishedAt || post.createdAt;
+              const formattedDate = displayDate
+                ? new Date(displayDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : '';
+
+              return (
+                <article key={post._id} className="clay overflow-hidden group flex flex-col justify-between hover:border-gold/40 transition duration-300">
+                  <div>
+                    <div className="relative aspect-[16/10] bg-[#14231b] overflow-hidden">
+                      <img
+                        src={img(post.featuredImage || '/hero-tattoo.jpg')}
+                        alt={post.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <span className="absolute top-3 left-3 bg-[#04120c]/85 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-gold border border-gold/30 tracking-wider uppercase">
+                        {post.category || 'Article'}
+                      </span>
+                    </div>
+
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-[11px] text-muted mb-2.5">
+                        {formattedDate && <span>{formattedDate}</span>}
+                        {formattedDate && <span>·</span>}
+                        <span className="text-emerald-400 font-medium">{readTime} min read</span>
+                      </div>
+
+                      <h2 className="text-xl font-bold text-cream group-hover:text-gold transition leading-snug">
+                        <Link to={`/blog/${post.slug || post._id}`}>{post.title}</Link>
+                      </h2>
+
+                      <p className="text-xs text-muted mt-2.5 line-clamp-3 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="px-6 pb-6 pt-3 border-t border-line flex items-center justify-between text-xs text-muted">
+                    <span className="font-medium text-silver">By {post.author || 'Noor'}</span>
+                    <Link
+                      to={`/blog/${post.slug || post._id}`}
+                      className="text-gold hover:text-cream flex items-center gap-1.5 font-semibold transition group-hover:translate-x-0.5"
+                    >
+                      <span>Read Full Guide</span>
+                      <ChevronRight size={14} />
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </Grid>
+        )}
       </State>
     </Wrap>
   );
@@ -772,6 +856,14 @@ export function Blog() {
 export function BlogPost() {
   const { slug } = useParams();
   const [p, err] = useFetch('/blog/' + slug);
+  const [related, setRelated] = useState([]);
+
+  useEffect(() => {
+    api.get('/blog?limit=4').then(res => {
+      const all = res.data.items || [];
+      setRelated(all.filter(item => item.slug !== slug && item._id !== slug).slice(0, 3));
+    }).catch(() => {});
+  }, [slug]);
 
   const ld = p && {
     '@context': 'https://schema.org',
@@ -783,8 +875,10 @@ export function BlogPost() {
     image: p.featuredImage ? img(p.featuredImage) : undefined
   };
 
+  const readTime = Math.max(1, Math.ceil((p?.content?.split(/\s+/).length || 200) / 200));
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
       <SEO
         title={p?.seo?.title || p?.title || 'Studio Journal'}
         description={p?.seo?.description || p?.excerpt || 'Expert tattoo insights and guides.'}
@@ -796,49 +890,136 @@ export function BlogPost() {
         </Helmet>
       )}
 
-      <nav aria-label="Breadcrumb" className="text-xs text-muted mb-6 flex items-center gap-2">
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="text-xs text-muted mb-8 flex items-center gap-2">
         <Link to="/" className="hover:text-cream">Home</Link>
         <span>/</span>
         <Link to="/blog" className="hover:text-cream">Studio Journal</Link>
         <span>/</span>
-        <span className="text-gold truncate max-w-[200px]">{p?.title}</span>
+        <span className="text-gold truncate max-w-[240px]">{p?.title}</span>
       </nav>
 
       <State d={p} err={err}>
         {p && (
-          <article className="clay p-6 sm:p-10">
-            <span className="text-xs text-gold uppercase tracking-widest font-semibold block mb-2">
-              {p.category || 'Tattoo Guide'}
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-bold leading-tight mb-4">{p.title}</h1>
-
-            <div className="flex items-center gap-3 text-xs text-muted mb-8 pb-4 border-b border-line">
-              <span>Written by <strong className="text-cream">{p.author}</strong></span>
-              <span>·</span>
-              <span>{p.publishedAt && new Date(p.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-            </div>
-
-            {p.featuredImage && (
-              <div className="rounded-2xl overflow-hidden mb-8 aspect-[16/9] bg-[#161619]">
-                <img src={img(p.featuredImage)} alt={p.title} className="w-full h-full object-cover" />
+          <>
+            <article className="clay p-6 sm:p-10 md:p-12 mb-16 border border-gold/30">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <span className="text-xs text-gold uppercase tracking-widest font-semibold px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/30">
+                  {p.category || 'Tattoo Guide'}
+                </span>
+                <span className="text-xs text-muted">·</span>
+                <span className="text-xs text-emerald-400 font-medium">{readTime} min read</span>
               </div>
+
+              <h1 className="text-3xl sm:text-5xl font-bold leading-tight mb-6 text-cream">
+                {p.title}
+              </h1>
+
+              <div className="flex items-center gap-3 text-xs text-muted mb-8 pb-5 border-b border-line">
+                <div className="h-8 w-8 rounded-full bg-gold/20 text-gold grid place-items-center font-bold text-xs uppercase border border-gold/30">
+                  {p.author ? p.author.charAt(0) : 'N'}
+                </div>
+                <div>
+                  <span className="text-cream font-semibold block">{p.author || 'Noor'}</span>
+                  <span className="text-[11px] text-muted">
+                    {p.publishedAt && new Date(p.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  </span>
+                </div>
+              </div>
+
+              {p.featuredImage && (
+                <div className="rounded-2xl overflow-hidden mb-10 aspect-[16/9] bg-[#0c2217] border border-[#1b3e30]">
+                  <img src={img(p.featuredImage)} alt={p.title} className="w-full h-full object-cover" />
+                </div>
+              )}
+
+              <div className="prose prose-invert max-w-none text-cream/90 leading-relaxed text-sm sm:text-base space-y-5 whitespace-pre-line font-sans">
+                {p.content}
+              </div>
+
+              {p.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-10 pt-6 border-t border-line">
+                  {p.tags.map(t => (
+                    <span key={t} className="text-xs px-2.5 py-1 rounded bg-[#0a2318] text-gold/80 border border-[#17382a]">
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* In-Article Consultation Box */}
+              <div className="clay p-6 sm:p-8 mt-12 bg-gradient-to-r from-[#04160f] to-[#09261a] text-center border border-gold/40">
+                <span className="text-gold text-xs uppercase tracking-widest font-semibold block mb-1">Expert Atelier Consultation</span>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2 text-cream">Have Questions About Your Custom Tattoo?</h3>
+                <p className="text-xs text-muted max-w-lg mx-auto mb-5 leading-relaxed">
+                  Our master artists provide complimentary design consultations at our private studio on Una Amb Road near Sabji Mandi, Prem Nagar.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <Link to="/booking" className="clay-btn !py-2.5 !px-5 text-xs">
+                    RESERVE A CONSULTATION
+                  </Link>
+                  <a
+                    href={waLink('8219811181', `Hi Noor Tattooz Studio, I just read your article "${p.title}" and would like to ask a question.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="clay-btn ghost !py-2.5 !px-5 text-xs inline-flex items-center gap-1.5"
+                  >
+                    <MessageCircle size={14} className="text-emerald-400" />
+                    <span>Ask On WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            {/* Related Posts Section */}
+            {related.length > 0 && (
+              <section className="mt-16 pt-8 border-t border-line">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <span className="text-xs text-gold uppercase tracking-widest font-semibold block">Continue Reading</span>
+                    <h2 className="text-2xl font-bold text-cream mt-0.5">RELATED ARTICLES & GUIDES</h2>
+                  </div>
+                  <Link to="/blog" className="text-xs text-gold hover:underline font-semibold flex items-center gap-1">
+                    <span>View All Articles</span>
+                    <ChevronRight size={13} />
+                  </Link>
+                </div>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {related.map(rel => (
+                    <article key={rel._id} className="clay overflow-hidden group flex flex-col justify-between hover:border-gold/40 transition">
+                      <div>
+                        <div className="relative aspect-[16/10] bg-[#0c2217] overflow-hidden">
+                          <img
+                            src={img(rel.featuredImage || '/hero-tattoo.jpg')}
+                            alt={rel.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                          />
+                          <span className="absolute top-2.5 left-2.5 bg-[#04120c]/85 px-2 py-0.5 rounded text-[9px] font-semibold text-gold border border-gold/30">
+                            {rel.category || 'Guide'}
+                          </span>
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-bold text-sm text-cream group-hover:text-gold transition line-clamp-2">
+                            <Link to={`/blog/${rel.slug || rel._id}`}>{rel.title}</Link>
+                          </h3>
+                          <p className="text-xs text-muted mt-1.5 line-clamp-2">
+                            {rel.excerpt}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="p-4 pt-0">
+                        <Link to={`/blog/${rel.slug || rel._id}`} className="text-xs text-gold font-semibold hover:underline flex items-center gap-1">
+                          <span>Read Article</span>
+                          <ChevronRight size={12} />
+                        </Link>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
             )}
-
-            <div className="prose prose-invert max-w-none text-cream/90 leading-relaxed text-sm sm:text-base space-y-4 whitespace-pre-line">
-              {p.content}
-            </div>
-
-            {/* Post CTA */}
-            <div className="clay p-6 mt-12 bg-gradient-to-r from-[#17171c] to-[#1d1d24] text-center border border-gold/30">
-              <h3 className="text-lg font-bold mb-2">Have questions about your tattoo concept?</h3>
-              <p className="text-xs text-muted max-w-md mx-auto mb-4">
-                Our resident artists are available for complimentary design consultations at our Una studio on Amb Road.
-              </p>
-              <Link to="/booking" className="clay-btn !py-2 !px-4 text-xs">
-                SCHEDULE CONSULTATION
-              </Link>
-            </div>
-          </article>
+          </>
         )}
       </State>
     </div>
@@ -943,12 +1124,30 @@ export const About = () => {
               </p>
             )}
           </div>
-          <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/30">
-            <img
-              src="/tattoos/noor-una/original-tattoo-1.jpg"
-              alt="Authentic Master Tattoo Art by Noor Tattooz"
-              className="w-full h-auto rounded-xl object-cover"
-            />
+          <div className="space-y-4">
+            <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/30">
+              <img
+                src="/tattoos/tattoo-craft.jpg"
+                alt="Professional Tattoo Artist Crafting Custom Stencil at Noor Tattooz"
+                className="w-full h-56 sm:h-64 rounded-xl object-cover"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="clay p-2 rounded-xl overflow-hidden border border-[#17382a]">
+                <img
+                  src="/tattoos/studio-interior.jpg"
+                  alt="Noor Tattoo Studio Interior & Clinical Sanctuary"
+                  className="w-full h-32 rounded-lg object-cover"
+                />
+              </div>
+              <div className="clay p-2 rounded-xl overflow-hidden border border-gold/30">
+                <img
+                  src="/tattoos/noor-una/original-tattoo-1.jpg"
+                  alt="Authentic Healed Master Tattoo Art by Noor"
+                  className="w-full h-32 rounded-lg object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
