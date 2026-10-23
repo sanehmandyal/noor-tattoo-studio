@@ -169,7 +169,7 @@ export default function Home() {
               <div className="glass-card p-3 relative overflow-hidden rounded-[2rem] border border-gold/40 shadow-2xl">
                 <div className="relative aspect-[4/5] rounded-[1.4rem] overflow-hidden bg-[#071d15]">
                   <img
-                    src="/tattoos/tattoo-craft.jpg"
+                    src={img(settings.heroImage || '/tattoos/tattoo-craft.jpg')}
                     alt="Professional Tattoo Artist Crafting Custom Tattoo at Noor Atelier Una"
                     width="600"
                     height="750"

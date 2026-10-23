@@ -625,6 +625,188 @@ export const autoSeedIfEmpty = async () => {
       ]);
     }
 
+    // 9. Tattoo Styles
+    if ((await M.TattooStyle.countDocuments()) === 0) {
+      await M.TattooStyle.create([
+        {
+          name: 'Realism & Portraits',
+          slug: 'realism',
+          tag: 'Realism',
+          badge: 'Photographic Depth',
+          image: '/tattoos/realism-portrait.jpg',
+          lead: 'Hyper-realistic black & grey and color portraiture captured with photographic fidelity and velvety chiaroscuro transitions.',
+          description: 'Realism at Noor Tattooz transcends standard reproduction; it is the art of capturing soul, light, and dimension on living skin. Mastered by resident artists Kabir Noor and Zara Merchant, our realism pieces utilize multi-stage greywash dilutions paired with soft-edge curved magnums to create seamless gradients without harsh outlines.\n\nWhether immortalizing a loved one, a memory portrait, classical Renaissance sculpture, or wildlife eyes, we balance tonal depth to ensure the tattoo will not darken into a muddy mass over time. Contrast is strategically preserved with negative skin highlights so your piece remains luminous for decades.',
+          specs: {
+            needles: '0803 Bugpin Tight Liners, 1015 & 1217 Curved Soft Magnums',
+            healingTime: '14 to 21 Days',
+            painLevel: 'Mild to Moderate (Soft blending technique minimizes epidermal trauma)',
+            bestPlacements: 'Inner Bicep, Outer Forearm, Calf, Shoulder Panel, Full Back'
+          },
+          technique: [
+            'Multi-pass greywash shading calibrated across 4 distinct tone wells',
+            'True-to-life light source mapping preserving chiaroscuro highlights',
+            'Skin micro-texture rendering with feather-light needle strokes'
+          ],
+          order: 1,
+          published: true
+        },
+        {
+          name: 'Fine Line & Single-Needle',
+          slug: 'fine-line',
+          tag: 'Fine Line',
+          badge: 'Microscopic Precision',
+          image: '/tattoos/fineline-botanical.jpg',
+          lead: 'Whisper-soft single-needle botanicals, architectural lines, and delicate calligraphy designed for timeless grace.',
+          description: 'Pioneered by Aanya Sen, fine line tattooing at Noor Tattooz treats skin like handmade cotton rag paper. Using specialized 0301 tight bugpin needles (just 0.25mm in diameter), we deposit medical-grade carbon pigment into the upper dermal layer with surgical restraint.\n\nUnlike heavy traditional lines that spread noticeably over time, our disciplined hand speed, minimal machine voltage, and proper needle angling guarantee that lines heal as crisp, sharp, and delicate as a fountain pen stroke. Perfect for delicate wildflowers, micro-script typography, and minimalist celestial diagrams.',
+          specs: {
+            needles: '0301RL & 0501RL Tight Bugpins (0.20mm – 0.25mm)',
+            healingTime: '7 to 10 Days (Minimal skin disruption)',
+            painLevel: 'Very Low (Gentle, superficial vibration)',
+            bestPlacements: 'Collarbone, Inner Wrist, Ribcage, Spine, Behind the Ear, Ankle'
+          },
+          technique: [
+            'Single-needle controlled depth preventing ink blowout or migration',
+            'Botanical accuracy drafted directly from live plant references',
+            'Feathered micro-shading with zero trauma to surrounding tissue'
+          ],
+          order: 2,
+          published: true
+        },
+        {
+          name: 'Black & Grey / Dark Art',
+          slug: 'black-and-grey',
+          tag: 'Black & Grey',
+          badge: 'Chiaroscuro & Drama',
+          image: '/tattoos/blackwork-gothic.jpg',
+          lead: 'Atmospheric gothic architecture, rich charcoal washes, and heavy contrasting shadows built for high visual impact.',
+          description: 'Black & Grey is the bedrock of permanent tattooing. At Noor Tattooz, we combine European dark art traditions with modern precision needle cartridges. We avoid premixed dilute inks, custom-mixing our black washes from pure triple-black vegan pigment on the day of your session.\n\nThe result is velvety charcoal shadows, deep saturated blacks that never fade to blue or green, and clean skin highlights that give the design immense three-dimensional weight.',
+          specs: {
+            needles: '1007RL Lining, 1211M1 Flat Shading, 1215 Curved Mag',
+            healingTime: '10 to 14 Days',
+            painLevel: 'Moderate',
+            bestPlacements: 'Full Sleeves, Calf & Shin, Chest Panels, Forearm'
+          },
+          technique: [
+            'Custom 4-drop greywash gradation system',
+            'Saturated deep black pigment saturation using Dynamic Triple Black',
+            'Structural anatomical framing ensuring lines move naturally with muscle groups'
+          ],
+          order: 3,
+          published: true
+        },
+        {
+          name: 'Modern Japanese Irezumi',
+          slug: 'japanese',
+          tag: 'Japanese',
+          badge: 'Mythological Mastery',
+          image: '/tattoos/japanese-dragon.jpg',
+          lead: 'Mythological Ryu dragons, swimming koi, wind bars, and ceremonial peonies engineered for grand bodily canvas.',
+          description: 'Headed by Vikram "Vex" Malhotra, our Japanese Irezumi work respects the ancient rules of Horimono while embracing clean contemporary line dynamics. Japanese tattoos are composed as full stories that flow with the body—dragons ascending toward the shoulder, koi swimming against the natural river current of the arm, and clouds (Kumo) framing sacred blossoms.\n\nWe ensure that every element is culturally coherent and placed according to traditional seasonal symbolism.',
+          specs: {
+            needles: '1209RL & 1211RL Bold Liners, 1223 Magnum for heavy wind bars',
+            healingTime: '14 to 20 Days',
+            painLevel: 'Moderate to High (Extensive background coverage)',
+            bestPlacements: 'Full Sleeves, 7/10 Sleeves, Torso Panels, Full Back'
+          },
+          technique: [
+            'Traditional wind bar (Kaze) and background water flow structuring',
+            'High-saturation sumi black tones contrasted with vivid negative space',
+            'Mythological storytelling and authentic Horimono composition'
+          ],
+          order: 4,
+          published: true
+        },
+        {
+          name: 'Minimalist & Lettering',
+          slug: 'minimalist',
+          tag: 'Minimalist',
+          badge: 'Understated Elegance',
+          image: '/tattoos/minimalist-script.jpg',
+          lead: 'Micro-script, personal mantras, coordinates, and subtle geometric silhouettes stripped of all excess noise.',
+          description: 'Minimalism requires absolute perfection; when there are only four lines in a tattoo, every millimeter must be immaculate. Our artists use digital typography tools to customize letter kerning, baseline curvature, and micro-spacing to ensure legibility throughout a lifetime.\n\nWe specialize in bespoke script handwriting replicas, meaningful coordinates, subtle date markers, and astrological silhouettes that speak through understated elegance.',
+          specs: {
+            needles: '0301RL Single Needle, 0503RL Round Liner',
+            healingTime: '5 to 7 Days',
+            painLevel: 'Low',
+            bestPlacements: 'Wrist, Ankle, Ribs, Collarbone, Behind Arm'
+          },
+          technique: [
+            'Custom typography kerning and letter spacing',
+            'Micro-needle placement that never spreads into adjacent skin',
+            'Personal handwriting vectorization from family letters or notes'
+          ],
+          order: 5,
+          published: true
+        },
+        {
+          name: 'Sacred Geometry & Mandalas',
+          slug: 'geometric',
+          tag: 'Geometric',
+          badge: 'Fibonacci & Symmetry',
+          image: '/tattoos/geometric-sleeve.jpg',
+          lead: 'Anatomical mandalas, stippled dotwork gradations, and mathematical ratios aligned to bodily symmetry.',
+          description: 'Sacred geometry explores the fundamental mathematical patterns of the cosmos: the golden ratio, the seed of life, Sri Yantra, and Platonic solids. Kabir Noor maps each geometric lattice directly onto the client\'s limb or torso, calculating distortion so that circles remain true circles when you rotate your arm or flex your muscles.\n\nEvery shadow is built through individual micro-dots (stippling), creating a mesmerizing sand-mandala texture that ages with magnificent clarity.',
+          specs: {
+            needles: '0803RL Stippling Liner, 1005RL Structural Liner',
+            healingTime: '10 to 14 Days',
+            painLevel: 'Mild (Dotwork creates significantly less irritation than solid packing)',
+            bestPlacements: 'Forearm Sleeves, Upper Back, Elbow, Knee, Chest Center'
+          },
+          technique: [
+            'Mathematical compass & grid mapping calculated for 3D skin curvature',
+            'Stippled dotwork shading creating soft acoustic gradients',
+            'Harmonic resonance and sacred symbol accuracy'
+          ],
+          order: 6,
+          published: true
+        },
+        {
+          name: 'Neo-Traditional & Ornamental',
+          slug: 'neo-traditional',
+          tag: 'Neo-Traditional',
+          badge: 'Rich Linework & Motifs',
+          image: '/tattoos/neotrad-dagger.jpg',
+          lead: 'Dynamic line weight hierarchy, antique daggers, gilded flora, and ornamental heraldry built to withstand the test of time.',
+          description: 'Neo-Traditional merges the bold, bulletproof readability of traditional American and European tattooing with intricate modern fine art detailing. Characterized by strong bold outer outlines, delicate internal hatching, and luxurious antique ornamentation, this style looks striking from across the room while revealing intricate subtleties up close.',
+          specs: {
+            needles: '1209RL Outer Border, 0805RL Fine Internal Hatching, 1215 Curved Mag',
+            healingTime: '12 to 16 Days',
+            painLevel: 'Moderate',
+            bestPlacements: 'Thigh, Outer Bicep, Forearm, Shin, Calves'
+          },
+          technique: [
+            'Dynamic line weight variation creating dramatic depth',
+            'Art Nouveau and Victorian ornamentation influences',
+            'Deep contrast saturation ensuring readability for decades'
+          ],
+          order: 7,
+          published: true
+        },
+        {
+          name: 'Custom Concepts & Cover-Ups',
+          slug: 'custom-designs',
+          tag: 'Custom Designs',
+          badge: 'Transformative Art',
+          image: '/tattoos/tattoo-craft.jpg',
+          lead: 'Transformative cover-ups, medical scar camouflaging, and bespoke multidisciplinary concepts engineered exclusively for your story.',
+          description: 'No two lives are alike, and no two tattoos at Noor Tattooz are duplicated. If you have an abstract idea that crosses multiple styles—or an unwanted old tattoo or surgical scar that needs reimagining—our master artists engineer bespoke compositions.\n\nWe work with your existing skin texture and coloration, turning imperfections into features and creating transformative art that restores confidence and pride.',
+          specs: {
+            needles: 'Multidisciplinary custom setup',
+            healingTime: '14 to 21 Days',
+            painLevel: 'Varies by placement and scar tissue maturation',
+            bestPlacements: 'Any body zone requiring transformation or custom storytelling'
+          },
+          technique: [
+            'Strategic dark-to-light camouflage matrix without muddy accumulation',
+            'Scar tissue evaluation ensuring gentle epidermal penetration',
+            '100% original bespoke illustration created in collaboration with client'
+          ],
+          order: 8,
+          published: true
+        }
+      ]);
+    }
+
     console.log('✓ Production defaults initialized successfully!');
   } catch (error) {
     console.error('Bootstrap error (non-fatal):', error.message);

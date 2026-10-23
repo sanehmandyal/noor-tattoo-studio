@@ -1127,7 +1127,7 @@ export const About = () => {
           <div className="space-y-4">
             <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/30">
               <img
-                src="/tattoos/tattoo-craft.jpg"
+                src={img(s.aboutImage || '/tattoos/tattoo-craft.jpg')}
                 alt="Professional Tattoo Artist Crafting Custom Stencil at Noor Tattooz"
                 className="w-full h-56 sm:h-64 rounded-xl object-cover"
               />
@@ -1442,7 +1442,17 @@ We work with your existing skin texture and coloration, turning imperfections in
 // Styles Directory Page
 export function Styles() {
   const [s, setS] = useState({});
-  useEffect(() => { api.get('/settings').then(r => setS(r.data)).catch(() => {}); }, []);
+  const [dbStyles, setDbStyles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.get('/settings').then(r => setS(r.data)).catch(() => {});
+    api.get('/styles?limit=50').then(r => {
+      setDbStyles(r.data.items || []);
+    }).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  const stylesList = dbStyles.length > 0 ? dbStyles : STYLES_DETAILS;
 
   return (
     <Wrap
@@ -1452,68 +1462,81 @@ export function Styles() {
       desc="Explore the distinct visual languages, technical needle configurations, and artistic traditions practiced by our resident masters in Una, Himachal Pradesh."
     >
       <div className="grid md:grid-cols-2 gap-8 mb-16">
-        {STYLES_DETAILS.map(style => (
-          <article key={style.slug} className="clay p-6 flex flex-col justify-between group hover:-translate-y-1 transition duration-300 border border-line hover:border-gold/50">
-            <div>
-              <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-5 bg-[#0a2016]">
-                <img
-                  src={style.img}
-                  alt={style.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <span className="absolute top-3 left-3 bg-[#030d08]/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-gold border border-gold/40">
-                  {style.badge}
-                </span>
+        {stylesList.map(style => {
+          const styleImg = img(style.image || style.img);
+          const specs = style.specs || {};
+
+          return (
+            <article key={style.slug || style._id} className="clay p-6 flex flex-col justify-between group hover:-translate-y-1 transition duration-300 border border-line hover:border-gold/50">
+              <div>
+                <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-5 bg-[#0a2016]">
+                  <img
+                    src={styleImg}
+                    alt={style.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {style.badge && (
+                    <span className="absolute top-3 left-3 bg-[#030d08]/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-gold border border-gold/40">
+                      {style.badge}
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="text-2xl font-bold text-cream group-hover:text-gold transition mb-2">
+                  {style.name}
+                </h2>
+                <p className="text-sm text-silver font-medium mb-3">
+                  {style.lead}
+                </p>
+                <p className="text-xs text-muted leading-relaxed line-clamp-3 mb-5">
+                  {style.description}
+                </p>
+
+                <div className="p-3.5 rounded-lg bg-[#05150f] border border-[#143024] text-xs space-y-1.5 mb-5">
+                  {specs.needles && (
+                    <div className="flex justify-between">
+                      <span className="text-muted">Needle Profile:</span>
+                      <span className="text-cream font-medium truncate max-w-[200px]">{specs.needles.split(',')[0]}</span>
+                    </div>
+                  )}
+                  {specs.healingTime && (
+                    <div className="flex justify-between">
+                      <span className="text-muted">Healing Time:</span>
+                      <span className="text-gold font-medium">{specs.healingTime}</span>
+                    </div>
+                  )}
+                  {specs.bestPlacements && (
+                    <div className="flex justify-between">
+                      <span className="text-muted">Recommended Placements:</span>
+                      <span className="text-silver truncate max-w-[200px]">{specs.bestPlacements.split(',')[0]}</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <h2 className="text-2xl font-bold text-cream group-hover:text-gold transition mb-2">
-                {style.name}
-              </h2>
-              <p className="text-sm text-silver font-medium mb-3">
-                {style.lead}
-              </p>
-              <p className="text-xs text-muted leading-relaxed line-clamp-3 mb-5">
-                {style.description}
-              </p>
-
-              <div className="p-3.5 rounded-lg bg-[#05150f] border border-[#143024] text-xs space-y-1.5 mb-5">
-                <div className="flex justify-between">
-                  <span className="text-muted">Needle Profile:</span>
-                  <span className="text-cream font-medium truncate max-w-[200px]">{style.specs.needles.split(',')[0]}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Healing Time:</span>
-                  <span className="text-gold font-medium">{style.specs.healingTime}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Recommended Placements:</span>
-                  <span className="text-silver truncate max-w-[200px]">{style.specs.bestPlacements.split(',')[0]}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
-              <Link to={`/styles/${style.slug}`} className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold">
-                Explore In-Depth Guide <ChevronRight size={14} />
-              </Link>
-              <div className="flex items-center gap-2">
-                {s.whatsapp && (
-                  <a
-                    href={waLink(s.whatsapp, `Hello Noor Tattooz, I am interested in discussing a ${style.name} tattoo.`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="clay-btn ghost !py-1.5 !px-3 !text-xs flex items-center gap-1"
-                  >
-                    <MessageCircle size={13} className="text-emerald-400" /> WhatsApp
-                  </a>
-                )}
-                <Link to={`/booking?style=${encodeURIComponent(style.name)}`} className="clay-btn !py-1.5 !px-3 !text-xs">
-                  BOOK STYLE
+              <div className="pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
+                <Link to={`/styles/${style.slug}`} className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold">
+                  Explore In-Depth Guide <ChevronRight size={14} />
                 </Link>
+                <div className="flex items-center gap-2">
+                  {s.whatsapp && (
+                    <a
+                      href={waLink(s.whatsapp, `Hello Noor Tattooz, I am interested in discussing a ${style.name} tattoo.`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="clay-btn ghost !py-1.5 !px-3 !text-xs flex items-center gap-1"
+                    >
+                      <MessageCircle size={13} className="text-emerald-400" /> WhatsApp
+                    </a>
+                  )}
+                  <Link to={`/booking?style=${encodeURIComponent(style.name)}`} className="clay-btn !py-1.5 !px-3 !text-xs">
+                    BOOK STYLE
+                  </Link>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
 
       <div className="clay p-8 text-center max-w-3xl mx-auto border border-gold/30">
@@ -1540,17 +1563,42 @@ export function StylePage() {
   const [works, setWorks] = useState([]);
   const [artists, setArtists] = useState([]);
   const [s, setS] = useState({});
-
-  const info = STYLES_DETAILS.find(item => item.slug === paramStyle || item.tag.toLowerCase() === (paramStyle || '').toLowerCase()) || STYLES_DETAILS[0];
+  const [info, setInfo] = useState(null);
 
   useEffect(() => {
     api.get('/settings').then(r => setS(r.data)).catch(() => {});
-    api.get('/gallery', { params: { style: info.tag, limit: 9 } }).then(r => setWorks(r.data.items || [])).catch(() => {});
+
+    // Query database for style first
+    api.get(`/styles/${paramStyle}`).then(r => {
+      setInfo(r.data);
+    }).catch(() => {
+      // Fallback to static catalogue
+      const fallback = STYLES_DETAILS.find(item => item.slug === paramStyle || item.tag.toLowerCase() === (paramStyle || '').toLowerCase()) || STYLES_DETAILS[0];
+      setInfo(fallback);
+    });
+  }, [paramStyle]);
+
+  useEffect(() => {
+    if (!info) return;
+    const tag = info.tag || info.name;
+    api.get('/gallery', { params: { style: tag, limit: 9 } }).then(r => setWorks(r.data.items || [])).catch(() => {});
     api.get('/artists?limit=10').then(r => {
-      const matched = (r.data.items || []).filter(a => a.styles?.some(st => st.toLowerCase().includes(info.tag.toLowerCase()) || info.tag.toLowerCase().includes(st.toLowerCase())));
+      const matched = (r.data.items || []).filter(a => a.styles?.some(st => st.toLowerCase().includes(tag.toLowerCase()) || tag.toLowerCase().includes(st.toLowerCase())));
       setArtists(matched.length ? matched : (r.data.items || []).slice(0, 2));
     }).catch(() => {});
   }, [info]);
+
+  if (!info) {
+    return (
+      <div className="text-center py-24 text-gold">
+        <p className="text-xs uppercase tracking-widest">Loading style guide…</p>
+      </div>
+    );
+  }
+
+  const styleImg = img(info.image || info.img);
+  const specs = info.specs || {};
+  const techniqueList = Array.isArray(info.technique) ? info.technique : (typeof info.technique === 'string' ? info.technique.split(',').map(t => t.trim()) : []);
 
   return (
     <Wrap
@@ -1562,52 +1610,66 @@ export function StylePage() {
       <div className="grid lg:grid-cols-12 gap-10 items-start mb-16">
         <div className="lg:col-span-5">
           <div className="clay p-3 rounded-2xl overflow-hidden border border-gold/40 shadow-2xl">
-            <img src={info.img} alt={info.name} className="w-full h-auto rounded-xl object-cover aspect-[4/3]" />
+            <img src={styleImg} alt={info.name} className="w-full h-auto rounded-xl object-cover aspect-[4/3]" />
           </div>
 
           <div className="clay p-6 mt-6 border border-line">
             <h4 className="text-xs uppercase tracking-widest text-gold font-bold mb-4">Technical Specifications</h4>
             <div className="space-y-3 text-xs">
-              <div>
-                <strong className="text-cream block">Needle Groupings:</strong>
-                <span className="text-muted">{info.specs.needles}</span>
-              </div>
-              <div>
-                <strong className="text-cream block">Healing Timeline:</strong>
-                <span className="text-emerald-400">{info.specs.healingTime}</span>
-              </div>
-              <div>
-                <strong className="text-cream block">Pain Sensation Profile:</strong>
-                <span className="text-silver">{info.specs.painLevel}</span>
-              </div>
-              <div>
-                <strong className="text-cream block">Recommended Placements:</strong>
-                <span className="text-muted">{info.specs.bestPlacements}</span>
-              </div>
+              {specs.needles && (
+                <div>
+                  <strong className="text-cream block">Needle Groupings:</strong>
+                  <span className="text-muted">{specs.needles}</span>
+                </div>
+              )}
+              {specs.healingTime && (
+                <div>
+                  <strong className="text-cream block">Healing Timeline:</strong>
+                  <span className="text-emerald-400">{specs.healingTime}</span>
+                </div>
+              )}
+              {specs.painLevel && (
+                <div>
+                  <strong className="text-cream block">Pain Sensation Profile:</strong>
+                  <span className="text-silver">{specs.painLevel}</span>
+                </div>
+              )}
+              {specs.bestPlacements && (
+                <div>
+                  <strong className="text-cream block">Recommended Placements:</strong>
+                  <span className="text-muted">{specs.bestPlacements}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="lg:col-span-7 clay p-8 border border-line">
-          <span className="text-xs font-semibold text-gold tracking-widest uppercase block mb-2">{info.badge}</span>
+          {info.badge && (
+            <span className="text-xs font-semibold text-gold tracking-widest uppercase block mb-2">{info.badge}</span>
+          )}
           <h2 className="text-3xl font-bold mb-4">{info.name} at Noor Tattooz</h2>
           <div className="text-sm text-silver/90 leading-relaxed whitespace-pre-line mb-8">
             {info.description}
           </div>
 
-          <h4 className="text-xs uppercase tracking-widest text-gold font-bold mb-3">Core Technical Tenets</h4>
-          <ul className="space-y-2.5 mb-8">
-            {info.technique.map((t, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-xs text-muted">
-                <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                <span>{t}</span>
-              </li>
-            ))}
-          </ul>
+          {techniqueList.length > 0 && (
+            <>
+              <h4 className="text-xs uppercase tracking-widest text-gold font-bold mb-3">Core Technical Tenets</h4>
+              <ul className="space-y-2.5 mb-8">
+                {techniqueList.map((t, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-xs text-muted">
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
           <div className="pt-6 border-t border-line flex flex-wrap items-center gap-4">
             <Link to={`/booking?style=${encodeURIComponent(info.name)}`} className="clay-btn">
-              BOOK A {info.tag.toUpperCase()} SESSION
+              BOOK A {(info.tag || info.name).toUpperCase()} SESSION
             </Link>
             {s.whatsapp && (
               <a

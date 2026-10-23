@@ -18,6 +18,8 @@ const settingFields = [
   'whatsapp',
   'mapsUrl',
   'ogImage',
+  'heroImage',
+  'aboutImage',
   'googleVerification'
 ];
 

@@ -69,7 +69,8 @@ const NAV_GROUPS = [
     title: 'Studio Content',
     items: [
       { id: 'gallery', label: 'Portfolio Works', icon: ImageIcon, desc: 'Tattoo artwork showcase' },
-      { id: 'services', label: 'Services & Pricing', icon: Sparkles, desc: 'Tattoo styles & treatments' },
+      { id: 'styles', label: 'Tattoo Styles', icon: Sparkles, desc: 'Tattoo styles & technique guides' },
+      { id: 'services', label: 'Services & Pricing', icon: Clock, desc: 'Tattoo styles & treatments' },
       { id: 'testimonials', label: 'Honest Reviews', icon: Star, desc: 'Verified client reviews' }
     ]
   },
@@ -932,6 +933,12 @@ function Dashboard() {
                       icon: ImageIcon
                     },
                     {
+                      label: 'Tattoo Styles & Guides',
+                      desc: 'Update tattoo styles & technique details',
+                      tab: 'styles',
+                      icon: Sparkles
+                    },
+                    {
                       label: 'Publish Blog & Articles',
                       desc: 'Create, edit & publish studio guides',
                       tab: 'blog',
@@ -986,7 +993,7 @@ function Dashboard() {
           {tab === 'settings' && <Settings />}
 
           {/* Dynamic Content Managers */}
-          {['gallery', 'services', 'testimonials', 'blog', 'faqs'].includes(tab) && (
+          {['gallery', 'services', 'testimonials', 'blog', 'faqs', 'styles'].includes(tab) && (
             <Manager kind={tab} key={tab} />
           )}
         </div>

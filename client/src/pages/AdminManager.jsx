@@ -94,6 +94,28 @@ export const RES = {
       f('published', 'Display on FAQ Page', 'bool'),
       f('answer', 'Detailed Studio Answer', 'textarea', { req: 1 })
     ]
+  },
+  styles: {
+    label: 'name',
+    title: 'Tattoo Styles & Disciplines',
+    desc: 'Manage all tattoo styles displayed on the Tattoo Styles page (/styles) and in style guides. Changes appear instantly.',
+    fields: [
+      f('image', 'Style Feature Image (Upload Photo)', 'image', { req: 1 }),
+      f('name', 'Style Name (e.g. Realism & Portraits)', 'text', { req: 1 }),
+      f('slug', 'URL Slug (e.g. realism, fine-line)'),
+      f('tag', 'Filter Tag / Category (e.g. Realism, Fine Line)', 'text', { req: 1 }),
+      f('badge', 'Badge (e.g. Photographic Depth, Microscopic Precision)'),
+      f('order', 'Display Order (e.g. 1, 2, 3)', 'number'),
+      f('published', 'Publish to Live Website', 'bool'),
+      f('lead', 'Short Summary / Hook', 'textarea', { req: 1 }),
+      f('description', 'Comprehensive Style Description', 'textarea', { req: 1 }),
+      f('specs.needles', 'Needle Groupings (e.g. 0803 Bugpin Tight Liners, 1015 Curved Mag)'),
+      f('specs.healingTime', 'Healing Timeline (e.g. 14 to 21 Days)'),
+      f('specs.painLevel', 'Pain Profile (e.g. Mild to Moderate)'),
+      f('specs.bestPlacements', 'Recommended Body Placements (e.g. Inner Bicep, Outer Forearm)'),
+      f('technique', 'Technical Tenets / Techniques (comma separated)', 'csv'),
+      ...SEO
+    ]
   }
 };
 
@@ -356,6 +378,14 @@ export function Settings() {
         f('ogImage', 'Social Share Preview Banner Image URL'),
         f('googleVerification', 'Google Search Console Verification Tag')
       ]
+    },
+    {
+      title: 'Studio Showcase & Custom Imagery',
+      subtitle: 'Custom images displayed in the website hero card and about sections. Changes persist live.',
+      fields: [
+        f('heroImage', 'Homepage Hero Showcase Image URL / Path (e.g. /tattoos/tattoo-craft.jpg)'),
+        f('aboutImage', 'About Page Studio Showcase Image URL / Path (e.g. /tattoos/tattoo-craft.jpg)')
+      ]
     }
   ];
 
@@ -477,7 +507,7 @@ export default function Manager({ kind }) {
   const [q, setQ] = useState('');
 
   const load = useCallback(() => {
-    const url = kind === 'blog' ? '/admin/blog' : `/${kind}`;
+    const url = ['blog', 'styles'].includes(kind) ? `/admin/${kind}` : `/${kind}`;
     return api
       .get(url, { params: { limit: 100 } })
       .then(r => setRows(r.data.items || []))

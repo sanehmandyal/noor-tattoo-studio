@@ -9,6 +9,7 @@ export { FAQ } from './FAQ.js';
 export { Booking } from './Booking.js';
 export { Inquiry } from './Inquiry.js';
 export { Settings } from './Settings.js';
+export { TattooStyle } from './TattooStyle.js';
 
 import User from './User.js';
 import Artist from './Artist.js';
@@ -20,6 +21,7 @@ import FAQ from './FAQ.js';
 import Booking from './Booking.js';
 import Inquiry from './Inquiry.js';
 import Settings from './Settings.js';
+import TattooStyle from './TattooStyle.js';
 
 export default {
   User,
@@ -31,5 +33,6 @@ export default {
   FAQ,
   Booking,
   Inquiry,
-  Settings
+  Settings,
+  TattooStyle
 };
