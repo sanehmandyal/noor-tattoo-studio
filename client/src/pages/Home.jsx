@@ -511,6 +511,81 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Latest Studio Journal Articles */}
+      {posts.length > 0 && (
+        <section className="py-20 bg-[#030f0a] border-y border-[#17382a]">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-10">
+              <div>
+                <span className="text-gold text-xs tracking-[0.3em] uppercase block mb-2 font-semibold">
+                  From the Studio
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-bold">LATEST JOURNAL ARTICLES</h2>
+                <p className="text-muted text-sm mt-2 max-w-xl">
+                  Tattoo aftercare advice, studio updates, and thoughtful guides from Noor.
+                </p>
+              </div>
+              <Link
+                to="/blog"
+                className="clay-btn ghost text-xs inline-flex items-center gap-2 self-start sm:self-auto"
+              >
+                <span>VISIT THE STUDIO JOURNAL</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.slice(0, 3).map(post => (
+                <article
+                  key={post._id}
+                  className="glass-card overflow-hidden group flex flex-col"
+                >
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    aria-label={`Read ${post.title}`}
+                    className="block aspect-[16/9] bg-[#071912] overflow-hidden"
+                  >
+                    {post.featuredImage ? (
+                      <img
+                        src={img(post.featuredImage)}
+                        alt={post.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full grid place-items-center text-gold/70 bg-gradient-to-br from-[#0b291d] to-[#071912]">
+                        <span className="font-display text-sm uppercase tracking-[0.2em]">
+                          Noor Tattooz Journal
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <span className="text-[10px] text-gold uppercase tracking-widest font-semibold mb-2">
+                      {post.category || 'Studio Article'}
+                    </span>
+                    <h3 className="text-lg font-bold text-cream leading-snug group-hover:text-gold transition">
+                      <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+                    </h3>
+                    {post.excerpt && (
+                      <p className="text-xs text-muted mt-2 line-clamp-3 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    <Link
+                      to={`/blog/${post.slug}`}
+                      className="text-gold hover:text-cream text-xs font-semibold inline-flex items-center gap-1 mt-auto pt-5"
+                    >
+                      Read article <ChevronRight size={14} />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Studio FAQ Quick Section */}
       {faqs.length > 0 && (
         <section className="py-20 bg-[#030e09] border-y border-[#17382a]">
