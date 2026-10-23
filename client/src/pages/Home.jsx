@@ -49,7 +49,18 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <div className="relative min-h-screen bg-[#020b07] text-cream overflow-hidden">
+      {/* Global Atmospheric Tattoo Studio Background Texture */}
+      <div className="fixed inset-0 pointer-events-none -z-30 overflow-hidden">
+        <img
+          src="/hero-tattoo.jpg"
+          alt="Studio Background Atmosphere"
+          className="w-full h-full object-cover object-center opacity-30 filter blur-[1px] brightness-[0.38] contrast-[1.1] scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020b07]/80 via-[#020b07]/90 to-[#020b07]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.1)_0%,_transparent_75%)]" />
+      </div>
+
       <SEO
         title="Noor Tattooz Studio Una | Best Tattoo Studio in Himachal Pradesh"
         description="Noor Tattooz Studio is the premier tattoo atelier on Una Amb Road near Sabji Mandi, Prem Nagar, Una, Himachal Pradesh 174303. Custom tattoos, realism, and sterile precision."
@@ -62,12 +73,12 @@ export default function Home() {
           <img
             src="/hero-tattoo.jpg"
             alt="Noor Tattoo Studio Professional Tattooing Atelier"
-            className="w-full h-full object-cover object-[center_35%] filter brightness-[0.22] contrast-[1.12] scale-105"
+            className="w-full h-full object-cover object-[center_35%] filter brightness-[0.42] contrast-[1.2] scale-105"
           />
           {/* Multi-directional Luxury Vignette Overlays for Crisp Typography */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#020b07] via-[#020b07]/92 to-[#020b07]/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020b07] via-transparent to-[#020b07]/85" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.18)_0%,_transparent_65%)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#020b07] via-[#020b07]/85 to-[#020b07]/55" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#020b07] via-transparent to-[#020b07]/75" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.25)_0%,_transparent_65%)]" />
         </div>
         
         <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-12 gap-12 items-center">
@@ -155,34 +166,35 @@ export default function Home() {
           >
             <div className="relative mx-auto max-w-md">
               <div className="absolute -inset-4 rounded-[2.5rem] bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.25)_0%,_rgba(223,183,80,0.12)_50%,_transparent_75%)] blur-2xl -z-10" />
-              <div className="glass-card p-3 relative overflow-hidden rounded-[2rem] border border-gold/30 shadow-2xl">
+              <div className="glass-card p-3 relative overflow-hidden rounded-[2rem] border border-gold/40 shadow-2xl">
                 <div className="relative aspect-[4/5] rounded-[1.4rem] overflow-hidden bg-[#071d15]">
                   <img
-                    src="/tattoos/noor-una/original-tattoo-1.jpg"
-                    alt="Original Tattoo Crafted at Noor Tattooz Studio Una"
+                    src="/tattoos/tattoo-craft.jpg"
+                    alt="Professional Tattoo Artist Crafting Custom Tattoo at Noor Atelier Una"
                     width="600"
                     height="750"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020b07]/90 via-[#020b07]/10 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020b07]/90 via-[#020b07]/15 to-transparent pointer-events-none" />
 
                   {/* Live Atelier Badge */}
-                  <div className="absolute top-3.5 right-3.5 bg-[#04120c]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold/30 flex items-center gap-2 shadow-lg">
+                  <div className="absolute top-3.5 right-3.5 bg-[#04120c]/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-gold/40 flex items-center gap-2 shadow-lg">
                     <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
-                    <span className="text-[10px] font-semibold text-silver tracking-wider uppercase">Prem Nagar Studio</span>
+                    <span className="text-[10px] font-bold text-silver tracking-wider uppercase">Prem Nagar Studio</span>
                   </div>
 
                   {/* Bottom Information Card */}
-                  <div className="absolute bottom-3.5 inset-x-3.5 bg-[#04120c]/90 backdrop-blur-md p-3.5 rounded-xl border border-[#1b3d2f] text-left flex items-center justify-between shadow-xl">
+                  <div className="absolute bottom-3.5 inset-x-3.5 bg-[#04120c]/95 backdrop-blur-md p-4 rounded-xl border border-[#1b3d2f] text-left flex items-center justify-between shadow-xl">
                     <div>
-                      <p className="text-[10px] tracking-widest text-gold uppercase font-bold">Noor Tattooz Atelier</p>
-                      <p className="text-xs font-medium text-silver mt-0.5">Una Amb Road · Prem Nagar (H.P.)</p>
+                      <p className="text-[10px] tracking-widest text-gold uppercase font-bold">Noor Tattoo Atelier</p>
+                      <p className="text-xs font-semibold text-cream mt-0.5">Bespoke Living Skin Artistry</p>
+                      <p className="text-[11px] text-muted">Una Amb Road · Prem Nagar (H.P.)</p>
                     </div>
                     <Link
                       to="/gallery"
-                      className="text-xs font-semibold text-gold hover:text-cream transition flex items-center gap-0.5"
+                      className="clay-btn text-xs !py-1.5 !px-3 font-semibold text-gold shrink-0"
                     >
-                      Gallery ›
+                      Portfolio ›
                     </Link>
                   </div>
                 </div>
@@ -678,6 +690,6 @@ export default function Home() {
           </a>
         </div>
       </section>
-    </>
+    </div>
   );
 }
