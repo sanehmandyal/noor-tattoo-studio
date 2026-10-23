@@ -57,13 +57,8 @@ if (!existingAdmin) {
   console.log('✓ Super Admin created');
 }
 
-// 3. Clear existing DEMO / sample records
-await M.Artist.deleteMany({});
-await M.Service.deleteMany({});
-await M.Gallery.deleteMany({});
-await M.BlogPost.deleteMany({});
-await M.Testimonial.deleteMany({});
-await M.FAQ.deleteMany({});
+// 3. Populate missing records safely without deleting user data
+console.log('Verifying studio data collections...');
 
 // 4. Resident Artists
 const artistsData = [

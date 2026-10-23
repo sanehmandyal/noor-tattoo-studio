@@ -20,12 +20,20 @@ export const ensureSuperAdmin = async () => {
       });
       console.log(`✓ Created Super Admin user: ${adminEmail}`);
     } else {
-      admin.email = adminEmail;
-      admin.status = 'active';
-      admin.role = 'super_admin';
-      admin.password = await bcrypt.hash(adminPassword, 12);
-      await admin.save();
-      console.log(`✓ Synchronized Super Admin credentials for: ${adminEmail}`);
+      // Preserve existing admin password and credentials so restarts NEVER overwrite admin changes
+      let changed = false;
+      if (admin.role !== 'super_admin') {
+        admin.role = 'super_admin';
+        changed = true;
+      }
+      if (admin.status !== 'active') {
+        admin.status = 'active';
+        changed = true;
+      }
+      if (changed) {
+        await admin.save();
+      }
+      console.log(`✓ Super Admin verified: ${admin.email}`);
     }
   } catch (e) {
     console.error('Super admin setup error:', e);
@@ -34,23 +42,12 @@ export const ensureSuperAdmin = async () => {
 
 export const autoSeedIfEmpty = async () => {
   try {
-    // Always guarantee super admin exists and credentials are valid
+    // Always guarantee super admin exists
     await ensureSuperAdmin();
 
-    const settingsCount = await M.Settings.countDocuments({ key: 'main' });
-    const artistsCount = await M.Artist.countDocuments();
-
-    // If database already contains data, do not overwrite anything
-    if (settingsCount > 0 && artistsCount > 0) {
-      return;
-    }
-
-    console.log('Database is empty or missing initial data. Initializing production defaults...');
-
-    // 1. Studio Settings
-    await M.Settings.findOneAndUpdate(
-      { key: 'main' },
-      {
+    // 1. Studio Settings - Seed ONLY if collection is completely empty
+    if ((await M.Settings.countDocuments({ key: 'main' })) === 0) {
+      await M.Settings.create({
         key: 'main',
         siteTitle: 'Noor Tattooz Studio — Premier Tattoo Atelier in Una, Himachal Pradesh',
         businessName: 'Noor Tattooz Studio',
@@ -67,28 +64,13 @@ export const autoSeedIfEmpty = async () => {
         mapsUrl: 'https://share.google/byos1q4FITCvikbhe',
         ogImage: '/logo.png',
         googleVerification: 'google-site-verification-noor-tattooz-2026'
-      },
-      { upsert: true, new: true }
-    );
-
-    // 2. Super Admin User
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@noortattoo.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@NoorTattoo2026!';
-    const existingAdmin = await M.User.findOne({ email: adminEmail });
-    if (!existingAdmin) {
-      await M.User.create({
-        name: 'Noor (Founder)',
-        email: adminEmail,
-        password: await bcrypt.hash(adminPassword, 12),
-        role: 'super_admin',
-        status: 'active'
       });
+      console.log('✓ Initialized default studio settings');
     }
 
-    // 3. Resident Artists
+    // 2. Resident Artists - Seed ONLY if 0 artists exist (NEVER overwrite or delete user-managed artists)
     let createdArtists = await M.Artist.find();
-    if (createdArtists.length < 4) {
-      await M.Artist.deleteMany({ name: 'Demo Artist' });
+    if (createdArtists.length === 0) {
       const masterArtists = [
         {
           name: 'Noor',
@@ -147,10 +129,9 @@ export const autoSeedIfEmpty = async () => {
           status: 'available'
         }
       ];
-      for (const a of masterArtists) {
-        await M.Artist.findOneAndUpdate({ name: a.name }, a, { upsert: true, new: true });
-      }
+      await M.Artist.create(masterArtists);
       createdArtists = await M.Artist.find();
+      console.log('✓ Initialized default resident artists');
     }
 
     const noor = createdArtists.find(a => a?.name?.includes('Noor')) || createdArtists[0];

@@ -31,11 +31,18 @@ export const errMsg = e =>
 export const img = u => {
   if (!u) return '';
   if (u.startsWith('http://') || u.startsWith('https://') || u.startsWith('data:')) return u;
-  // If it's an uploaded asset from the backend storage (/uploads/...)
-  if (u.startsWith('/uploads/') || u.startsWith('uploads/')) {
+  // If it's an uploaded asset from the backend storage (/uploads/... or /api/media/...)
+  if (
+    u.startsWith('/uploads/') ||
+    u.startsWith('uploads/') ||
+    u.startsWith('/api/media/') ||
+    u.startsWith('api/media/') ||
+    u.startsWith('/media/')
+  ) {
     const envUrl = import.meta.env.VITE_API_URL || PROD_API_URL;
     const origin = envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
-    return `${origin}${u.startsWith('/') ? '' : '/'}${u}`;
+    const cleanPath = u.startsWith('/media/') ? `/api${u}` : (u.startsWith('/') ? u : `/${u}`);
+    return `${origin}${cleanPath}`;
   }
   // Static frontend assets (/tattoos/..., /hero-tattoo.jpg, /logo.png, etc.)
   return u;

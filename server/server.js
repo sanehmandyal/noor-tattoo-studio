@@ -87,10 +87,14 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 // Connect to Database and safely auto-seed initial data in background
 (async () => {
   try {
-    await connectDB();
-    console.log('MongoDB connected successfully');
-    await autoSeedIfEmpty();
-    console.log('Database initialization / auto-seed complete');
+    const conn = await connectDB();
+    if (conn) {
+      console.log('MongoDB connected successfully');
+      await autoSeedIfEmpty();
+      console.log('Database initialization / auto-seed complete');
+    } else {
+      console.error('CRITICAL: MongoDB is not connected. Please verify MONGODB_URI and MongoDB Atlas IP whitelist (0.0.0.0/0).');
+    }
   } catch (err) {
     console.error('Database connection or auto-seed initialization warning:', err.message);
   }

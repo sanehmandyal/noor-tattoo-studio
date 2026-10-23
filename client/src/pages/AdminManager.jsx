@@ -116,6 +116,21 @@ export const RES = {
       f('technique', 'Technical Tenets / Techniques (comma separated)', 'csv'),
       ...SEO
     ]
+  },
+  artists: {
+    label: 'name',
+    title: 'Resident Tattoo Masters',
+    desc: 'Manage resident tattoo artists, bios, experience, specialties, and portfolio links.',
+    fields: [
+      f('name', 'Artist Name', 'text', { req: 1 }),
+      f('image', 'Artist Photo / Portrait', 'image', { req: 1 }),
+      f('experience', 'Years Behind the Machine (Experience)', 'number'),
+      f('styles', 'Tattoo Styles (comma separated, e.g. Fine Line, Realism)', 'csv'),
+      f('specialties', 'Signature Specialties (comma separated)', 'csv'),
+      f('socialLinks.instagram', 'Instagram Profile Link'),
+      f('socialLinks.facebook', 'Facebook Profile Link'),
+      f('bio', 'Comprehensive Artist Biography', 'textarea', { req: 1 })
+    ]
   }
 };
 
@@ -507,7 +522,7 @@ export default function Manager({ kind }) {
   const [q, setQ] = useState('');
 
   const load = useCallback(() => {
-    const url = ['blog', 'styles'].includes(kind) ? `/admin/${kind}` : `/${kind}`;
+    const url = ['blog', 'styles', 'artists'].includes(kind) ? `/admin/${kind}` : `/${kind}`;
     return api
       .get(url, { params: { limit: 100 } })
       .then(r => setRows(r.data.items || []))
