@@ -15,10 +15,15 @@ export const globalErrorHandler = (err, req, res, next) => {
     return res.status(400).json({ message: 'Upload failed (max 5MB)' });
   }
   if (err.code === 11000) {
-    return res.status(409).json({ message: 'Duplicate value' });
+    const fields = Object.keys(err.keyPattern || {}).join(', ');
+    return res.status(409).json({ message: `Duplicate entry exists for ${fields || 'field'}. Please use a unique title or name.` });
   }
-  if (err.name === 'CastError' || err.name === 'ValidationError') {
-    return res.status(400).json({ message: 'Invalid data' });
+  if (err.name === 'ValidationError') {
+    const messages = Object.values(err.errors || {}).map(e => e.message).join(', ');
+    return res.status(400).json({ message: messages || 'Validation failed' });
+  }
+  if (err.name === 'CastError') {
+    return res.status(400).json({ message: 'Invalid record identifier' });
   }
 
   const status = err.status || 500;

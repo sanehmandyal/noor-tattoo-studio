@@ -10,8 +10,28 @@ const getBaseURL = () => {
 
 export const api = axios.create({
   baseURL: getBaseURL(),
-  withCredentials: true
+  withCredentials: true,
+  timeout: 45000 // Generous timeout for server spin-up & cloud queries
 });
+
+// Resilient retry interceptor for GET queries during container cold starts (Render/Vercel)
+api.interceptors.response.use(
+  response => response,
+  async error => {
+    const config = error.config;
+    if (!config || config.method?.toLowerCase() !== 'get' || config._retryCount >= 2) {
+      return Promise.reject(error);
+    }
+    const status = error.response?.status;
+    const isRecoverable = !error.response || [502, 503, 504, 408].includes(status) || error.code === 'ECONNABORTED';
+    if (isRecoverable) {
+      config._retryCount = (config._retryCount || 0) + 1;
+      await new Promise(r => setTimeout(r, config._retryCount * 2500));
+      return api(config);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Attach bearer token for cross-origin environments where 3rd-party cookies might be restricted
 api.interceptors.request.use(config => {
