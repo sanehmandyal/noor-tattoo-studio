@@ -265,7 +265,9 @@ export function ArtistPage() {
 
 // 3. GALLERY (PORTFOLIO)
 export function Gallery() {
-  const [style, setStyle] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryStyle = searchParams.get('style');
+  const [style, setStyle] = useState(queryStyle || 'All');
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
@@ -274,9 +276,21 @@ export function Gallery() {
   const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState(null);
   const [settings, setSettings] = useState({});
+  const [dynamicStyles, setDynamicStyles] = useState(STYLES);
+
+  useEffect(() => {
+    if (queryStyle && queryStyle !== style) {
+      setStyle(queryStyle);
+    }
+  }, [queryStyle]);
 
   useEffect(() => {
     api.get('/settings').then(r => setSettings(r.data)).catch(() => {});
+    api.get('/styles?limit=50').then(r => {
+      const dbTags = (r.data.items || []).map(s => s.tag || s.name).filter(Boolean);
+      const merged = ['All', ...new Set([...STYLES.slice(1), ...dbTags])];
+      setDynamicStyles(merged);
+    }).catch(() => {});
   }, []);
 
   useEffect(() => { setPage(1); }, [style, q]);
@@ -313,12 +327,19 @@ export function Gallery() {
     >
       {/* Search & Style Filters */}
       <div className="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        {/* Style Pills */}
+        {/* Style Pills (Dynamically linked with Website & Admin Tattoo Styles) */}
         <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
-          {STYLES.map(s => (
+          {dynamicStyles.map(s => (
             <button
               key={s}
-              onClick={() => setStyle(s)}
+              onClick={() => {
+                setStyle(s);
+                if (s === 'All') {
+                  setSearchParams({});
+                } else {
+                  setSearchParams({ style: s });
+                }
+              }}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider transition ${
                 style === s
                   ? 'bg-gold text-[#111] shadow-md font-bold'
@@ -418,7 +439,19 @@ export function Gallery() {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs text-gold font-semibold uppercase tracking-wider">{activeModal.style}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveModal(null);
+                      setStyle(activeModal.style);
+                      setSearchParams({ style: activeModal.style });
+                    }}
+                    className="text-xs text-gold hover:underline font-semibold uppercase tracking-wider inline-flex items-center gap-1"
+                    title={`Filter gallery by ${activeModal.style}`}
+                  >
+                    <span>{activeModal.style}</span>
+                    <ChevronRight size={12} />
+                  </button>
                   {activeModal.category && (
                     <span className="text-[10px] px-2 py-0.5 rounded bg-[#0a261c] text-emerald border border-emerald/30 font-semibold uppercase">
                       {activeModal.category}
@@ -1515,9 +1548,18 @@ export function Styles() {
               </div>
 
               <div className="pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
-                <Link to={`/styles/${style.slug}`} className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold">
-                  Explore In-Depth Guide <ChevronRight size={14} />
-                </Link>
+                <div className="flex items-center gap-3">
+                  <Link to={`/styles/${style.slug}`} className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold">
+                    Explore Guide <ChevronRight size={14} />
+                  </Link>
+                  <Link
+                    to={`/gallery?style=${encodeURIComponent(style.tag || style.name)}`}
+                    className="text-xs text-silver hover:text-gold flex items-center gap-1 font-medium"
+                  >
+                    <Sparkles size={12} className="text-gold" />
+                    <span>View Artworks</span>
+                  </Link>
+                </div>
                 <div className="flex items-center gap-2">
                   {s.whatsapp && (
                     <a

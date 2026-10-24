@@ -116,21 +116,6 @@ export const RES = {
       f('technique', 'Technical Tenets / Techniques (comma separated)', 'csv'),
       ...SEO
     ]
-  },
-  artists: {
-    label: 'name',
-    title: 'Resident Tattoo Masters',
-    desc: 'Manage resident tattoo artists, bios, experience, specialties, and portfolio links.',
-    fields: [
-      f('name', 'Artist Name', 'text', { req: 1 }),
-      f('image', 'Artist Photo / Portrait', 'image', { req: 1 }),
-      f('experience', 'Years Behind the Machine (Experience)', 'number'),
-      f('styles', 'Tattoo Styles (comma separated, e.g. Fine Line, Realism)', 'csv'),
-      f('specialties', 'Signature Specialties (comma separated)', 'csv'),
-      f('socialLinks.instagram', 'Instagram Profile Link'),
-      f('socialLinks.facebook', 'Facebook Profile Link'),
-      f('bio', 'Comprehensive Artist Biography', 'textarea', { req: 1 })
-    ]
   }
 };
 
@@ -282,6 +267,39 @@ export function Form({ fields, value, onSave, onCancel, refs = [], title = 'Edit
                         {val ? `Current: ${val}` : 'Upload JPG, PNG or WebP'}
                       </p>
                     </div>
+                  </div>
+                </div>
+              ) : fl.name === 'style' ? (
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    list="gallery-style-options"
+                    className="field w-full text-xs"
+                    value={val ?? ''}
+                    placeholder="Type or select style to link with website (e.g. Realism, Fine Line, Japanese)…"
+                    onChange={e => on(e.target.value)}
+                  />
+                  <datalist id="gallery-style-options">
+                    {['Realism', 'Fine Line', 'Black & Grey', 'Japanese', 'Minimalist', 'Geometric', 'Neo-Traditional', 'Mandala', 'Floral', 'Portrait', 'Lettering', 'Spiritual', 'Abstract', 'Sleeve', 'Custom Designs'].map(s => (
+                      <option key={s} value={s} />
+                    ))}
+                  </datalist>
+                  <div className="flex flex-wrap gap-1.5 items-center pt-0.5">
+                    <span className="text-[10px] text-muted">Quick Link Style:</span>
+                    {['Realism', 'Fine Line', 'Black & Grey', 'Japanese', 'Geometric', 'Minimalist', 'Custom Designs'].map(st => (
+                      <button
+                        type="button"
+                        key={st}
+                        onClick={() => on(st)}
+                        className={`text-[10px] px-2 py-0.5 rounded border transition ${
+                          val === st
+                            ? 'bg-gold/20 text-gold border-gold/50 font-bold'
+                            : 'bg-[#04120c] text-silver hover:text-cream border-[#163829] hover:border-gold/30'
+                        }`}
+                      >
+                        {st}
+                      </button>
+                    ))}
                   </div>
                 </div>
               ) : (
@@ -522,7 +540,7 @@ export default function Manager({ kind }) {
   const [q, setQ] = useState('');
 
   const load = useCallback(() => {
-    const url = ['blog', 'styles', 'artists'].includes(kind) ? `/admin/${kind}` : `/${kind}`;
+    const url = ['blog', 'styles'].includes(kind) ? `/admin/${kind}` : `/${kind}`;
     return api
       .get(url, { params: { limit: 100 } })
       .then(r => setRows(r.data.items || []))
@@ -589,15 +607,43 @@ export default function Manager({ kind }) {
           <p className="text-xs text-muted mt-1">{cfg.desc}</p>
         </div>
 
-        {!edit && (
-          <button
-            onClick={() => setEdit({})}
-            className="clay-btn text-xs !py-2.5 !px-5 inline-flex items-center gap-2 shrink-0 shadow-lg"
-          >
-            <Plus size={15} />
-            <span>ADD NEW {cfg.title.split(' ')[0].toUpperCase()}</span>
-          </button>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+          {kind === 'gallery' && (
+            <a
+              href="/styles"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="clay-btn ghost text-xs !py-2 !px-3 inline-flex items-center gap-1.5 border border-gold/30 text-gold"
+              title="Open public Tattoo Styles page in new tab"
+            >
+              <Sparkles size={13} />
+              <span>Website Styles (/styles)</span>
+              <ExternalLink size={11} />
+            </a>
+          )}
+          {kind === 'styles' && (
+            <a
+              href="/gallery"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="clay-btn ghost text-xs !py-2 !px-3 inline-flex items-center gap-1.5 border border-gold/30 text-gold"
+              title="Open public Portfolio Gallery in new tab"
+            >
+              <ImageIcon size={13} />
+              <span>Website Portfolio (/gallery)</span>
+              <ExternalLink size={11} />
+            </a>
+          )}
+          {!edit && (
+            <button
+              onClick={() => setEdit({})}
+              className="clay-btn text-xs !py-2.5 !px-5 inline-flex items-center gap-2 shrink-0 shadow-lg"
+            >
+              <Plus size={15} />
+              <span>ADD NEW {cfg.title.split(' ')[0].toUpperCase()}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {err && (
@@ -716,6 +762,44 @@ export default function Manager({ kind }) {
                       <p className="text-xs text-muted line-clamp-2 leading-relaxed">
                         {r.answer}
                       </p>
+                    )}
+
+                    {/* Live Website Style / Gallery Links */}
+                    {kind === 'styles' && r.slug && (
+                      <div className="flex flex-wrap items-center gap-2 pt-1.5 text-[11px] border-t border-[#122e21]">
+                        <a
+                          href={`/styles/${r.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gold hover:underline inline-flex items-center gap-1 font-medium"
+                        >
+                          <span>Website Style Page</span>
+                          <ExternalLink size={10} />
+                        </a>
+                        <span className="text-muted/60">•</span>
+                        <a
+                          href={`/gallery?style=${encodeURIComponent(r.tag || r.name)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-silver hover:text-cream inline-flex items-center gap-1"
+                        >
+                          <span>View Artworks</span>
+                          <ExternalLink size={10} />
+                        </a>
+                      </div>
+                    )}
+                    {kind === 'gallery' && r.style && (
+                      <div className="flex items-center gap-2 pt-1.5 text-[11px] border-t border-[#122e21]">
+                        <a
+                          href={`/gallery?style=${encodeURIComponent(r.style)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gold hover:underline inline-flex items-center gap-1 font-medium"
+                        >
+                          <span>Linked Style: {r.style}</span>
+                          <ExternalLink size={10} />
+                        </a>
+                      </div>
                     )}
                   </div>
 
