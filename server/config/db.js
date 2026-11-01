@@ -15,7 +15,8 @@ mongoose.connection.on('reconnected', () => {
 
 export const connectDB = async (retryCount = 0) => {
   const uri = process.env.MONGODB_URI?.trim();
-  if (!uri) {
+  const localUri = process.env.MONGODB_LOCAL_URI?.trim() || 'mongodb://127.0.0.1:27017/noor-tattoo-studio';
+  if (!uri && !localUri) {
     console.error('MONGODB_URI is required in server/.env or environment variables');
     return null;
   }
@@ -25,15 +26,32 @@ export const connectDB = async (retryCount = 0) => {
   try {
     const conn = await mongoose.connect(uri, {
       dbName,
-      serverSelectionTimeoutMS: 15000,
+      serverSelectionTimeoutMS: 5000,
       autoIndex: process.env.NODE_ENV !== 'production'
     });
     console.log(`✓ MongoDB Connected to cluster: ${conn.connection.host} [Database: ${conn.connection.name}]`);
     return conn;
   } catch (error) {
-    console.error(`MongoDB connection attempt ${retryCount + 1} failed: ${error.message}`);
-    if (retryCount < 5) {
-      console.log(`Retrying MongoDB connection in 3 seconds...`);
+    console.warn(`MongoDB primary cluster connection attempt failed: ${error.message}`);
+    
+    // In local development or if Atlas IP whitelist blocks connection, seamlessly fallback to running local MongoDB
+    if (process.env.NODE_ENV !== 'production' || !process.env.RENDER) {
+      try {
+        console.log(`ℹ️ Checking local MongoDB fallback (${localUri})...`);
+        const localConn = await mongoose.connect(localUri, {
+          dbName,
+          serverSelectionTimeoutMS: 3000,
+          autoIndex: true
+        });
+        console.log(`✓ Successfully connected to local MongoDB fallback: ${localConn.connection.host} [Database: ${localConn.connection.name}]`);
+        return localConn;
+      } catch (localErr) {
+        console.warn(`Local MongoDB fallback was not reachable: ${localErr.message}`);
+      }
+    }
+
+    if (retryCount < 3) {
+      console.log(`Retrying MongoDB connection in 3 seconds... (Attempt ${retryCount + 1}/3)`);
       await new Promise(r => setTimeout(r, 3000));
       return connectDB(retryCount + 1);
     }

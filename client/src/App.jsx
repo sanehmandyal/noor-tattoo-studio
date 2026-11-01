@@ -218,10 +218,10 @@ function Layout() {
             ))}
 
             <div className="grid grid-cols-2 gap-2 pt-2 border-b border-[#132c21] pb-3 text-xs text-silver">
+              <Link to="/artists" onClick={() => setOpen(false)} className="hover:text-gold">› Resident Masters</Link>
               <Link to="/hygiene" onClick={() => setOpen(false)} className="hover:text-gold">› Clinical Sterility</Link>
               <Link to="/aftercare" onClick={() => setOpen(false)} className="hover:text-gold">› Tattoo Aftercare</Link>
               <Link to="/faq" onClick={() => setOpen(false)} className="hover:text-gold">› Studio FAQ</Link>
-              <Link to="/about" onClick={() => setOpen(false)} className="hover:text-gold">› About Studio</Link>
             </div>
 
             <a
@@ -344,6 +344,7 @@ function Layout() {
             <ul className="space-y-2 text-sm text-muted">
               <li><Link to="/" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Home</Link></li>
               <li><Link to="/about" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> About Studio</Link></li>
+              <li><Link to="/artists" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Resident Masters</Link></li>
               <li><Link to="/gallery" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Curated Portfolio</Link></li>
               <li><Link to="/styles" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Tattoo Styles</Link></li>
               <li><Link to="/pricing" className="hover:text-cream transition flex items-center gap-1.5"><span className="text-gold/50">›</span> Custom Quotes & Estimates</Link></li>
@@ -434,8 +435,8 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="booking" element={<Booking />} />
           <Route path="about" element={<About />} />
-          <Route path="artists" element={<Navigate to="/about" replace />} />
-          <Route path="artists/:slug" element={<Navigate to="/about" replace />} />
+          <Route path="artists" element={<Artists />} />
+          <Route path="artists/:slug" element={<ArtistPage />} />
           <Route path="styles" element={<Styles />} />
           <Route path="styles/:style" element={<StylePage />} />
           <Route path="gallery" element={<Gallery />} />

@@ -18,7 +18,7 @@ const bookingSchema = z.object({
   description: z.string().min(10).max(2000),
   referenceImage: z
     .string()
-    .regex(/^(\/uploads\/[\w.-]+|https:\/\/res\.cloudinary\.com\/[\w\/.-]+)$/)
+    .regex(/^(\/uploads\/[\w.-]+|\/api\/media\/[a-f\d]{24}|https?:\/\/[\w\/.-]+)$/i)
     .optional()
     .or(z.literal(''))
 });

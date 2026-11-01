@@ -14,6 +14,9 @@
     "install:all": "npm --prefix server install && npm --prefix client install",
     "seed": "npm --prefix server run seed",
     "seed:minimal": "npm --prefix server run seed:minimal",
+    "test:db": "node server/test-connection.js",
+    "test:api": "node server/test-api-e2e.js",
+    "test:live": "node --use-system-ca server/test-live-production.js",
     "start": "node server/server.js"
   }
 }

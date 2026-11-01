@@ -3,9 +3,14 @@ import axios from 'axios';
 const PROD_API_URL = 'https://noor-tattoo-studio-api.onrender.com';
 
 const getBaseURL = () => {
-  const envUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PROD_API_URL : '/api');
-  const clean = (envUrl || PROD_API_URL).replace(/\/+$/, '');
-  return clean.endsWith('/api') ? clean : `${clean}/api`;
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.trim()) {
+    const clean = envUrl.trim().replace(/\/+$/, '');
+    return clean.endsWith('/api') ? clean : `${clean}/api`;
+  }
+  // In development, Vite proxies '/api' to localhost:5000.
+  // In production on Vercel, vercel.json rewrites '/api' to Render.
+  return '/api';
 };
 
 export const api = axios.create({
@@ -59,10 +64,12 @@ export const img = u => {
     u.startsWith('api/media/') ||
     u.startsWith('/media/')
   ) {
-    const envUrl = import.meta.env.VITE_API_URL || PROD_API_URL;
-    const origin = envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
     const cleanPath = u.startsWith('/media/') ? `/api${u}` : (u.startsWith('/') ? u : `/${u}`);
-    return `${origin}${cleanPath}`;
+    if (import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL.trim()) {
+      const origin = import.meta.env.VITE_API_URL.trim().replace(/\/api\/?$/, '').replace(/\/+$/, '');
+      return `${origin}${cleanPath}`;
+    }
+    return cleanPath;
   }
   // Static frontend assets (/tattoos/..., /hero-tattoo.jpg, /logo.png, etc.)
   return u;

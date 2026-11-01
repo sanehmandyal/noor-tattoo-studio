@@ -23,11 +23,37 @@
   --error: #ef4444;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   overflow-x: hidden;
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Elegant Luxury Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #020906;
+}
+::-webkit-scrollbar-thumb {
+  background: #143526;
+  border-radius: 9999px;
+  border: 1px solid rgba(223, 183, 80, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #dfb750;
+}
+
+::selection {
+  background: rgba(223, 183, 80, 0.35);
+  color: #fae188;
 }
 
 body {
